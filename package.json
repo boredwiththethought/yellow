@@ -1,0 +1,23 @@
+{
+  "name": "fasco",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev:web": "cd apps/frontend && bun run dev",
+    "dev:backend" : "cd apps/backend && bun run dev",
+    "dev" : "concurrently \"bun run dev:backend\" \"bun run dev:web\"",
+    "build:web": "cd apps/frontend && bun run build",
+    "build:backend": "cd apps/backend && bun run build",
+    "build": "bun run build:backend && bun run build:web"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
