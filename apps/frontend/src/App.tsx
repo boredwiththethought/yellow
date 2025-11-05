@@ -5,14 +5,15 @@ import { Routes, Route } from 'react-router-dom';
 // Импорты БЕЗ алиасов (напрямую)
 import CartPage from './pages/CartPage/CartPage';
 import ThankYouPage from './pages/ThankYouPage/ThankYouPage';
+import HomePage from './pages/HomePage/HomePage';
 
 const App: React.FC = () => {
   return (
     <div className="app">
       <Routes>
-        {/* Главная - показываем Cart Page */}
-        <Route path="/" element={<CartPage />} />
-        
+        {/* Главная - показываем Home Page */}
+        <Route path="/" element={<HomePage />} />
+
         {/* Cart Page */}
         <Route path="/cart" element={<CartPage />} />
         

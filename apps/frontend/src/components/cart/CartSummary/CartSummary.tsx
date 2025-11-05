@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Gift } from "lucide-react";
+import { Square } from "lucide-react";
 
 interface CartSummaryProps {
   subtotal?: number;
@@ -11,75 +11,71 @@ interface CartSummaryProps {
 const CartSummary: React.FC<CartSummaryProps> = ({ subtotal = 100.0, shipping = 0, discount = 0 }) => {
   const [giftWrap, setGiftWrap] = useState(false);
   const giftWrapPrice = 10.0;
-
   const total = subtotal + shipping - discount + (giftWrap ? giftWrapPrice : 0);
 
   return (
-    <div className="sticky top-4 rounded-lg border bg-white p-6">
-      {/* Gift Wrap Option */}
-      <div className="mb-6 flex items-center gap-3 rounded-lg border p-4">
-        <input
-          type="checkbox"
-          id="gift-wrap"
-          checked={giftWrap}
-          onChange={e => setGiftWrap(e.target.checked)}
-          className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
-        />
-        <label htmlFor="gift-wrap" className="flex flex-1 cursor-pointer items-center gap-2">
-          <Gift className="h-5 w-5 text-gray-600" />
-          <span className="text-sm">
-            For <span className="font-medium">${giftWrapPrice.toFixed(2)}</span> Please Wrap The Product.
-          </span>
-        </label>
-      </div>
-
-      {/* Summary */}
-      <div className="mb-6 space-y-3">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-600">Subtotal</span>
-          <span className="font-medium text-black">${subtotal.toFixed(2)}</span>
+    <div className="container mx-auto flex pt-[30px] pb-[100px] px-4">
+      <div className=" flex flex-col ml-auto">
+        <div className="border-[rgba(0, 0, 0, 0.39)] flex items-center gap-3 border-b pb-5">
+          <Square
+            className="cursor-pointer"
+            onInput={() => setGiftWrap(!giftWrap)}
+            onClick={() => setGiftWrap(!giftWrap)}
+            aria-checked={giftWrap}
+            fill={giftWrap ? "black" : "none"}
+          />
+          <div className="flex items-center gap-1">
+            <p
+              style={{ fontFamily: "Poppins" }}
+              className="text-center align-middle text-[22px] leading-[42px] font-normal tracking-[0px] text-[#8A8A8A] capitalize"
+            >
+              For
+            </p>{" "}
+            <span
+              style={{ fontFamily: "Poppins" }}
+              className="text-center align-middle text-[22px] leading-[42px] font-normal tracking-[0px] capitalize"
+            >
+              {giftWrap ? "$0.00" : "$10.00"}
+            </span>{" "}
+            <span
+              style={{ fontFamily: "Poppins" }}
+              className="text-center align-middle text-[22px] leading-[42px] font-normal tracking-[0px] text-[#8A8A8A] capitalize"
+            >
+              please wrap the product
+            </span>
+          </div>
         </div>
-
-        {shipping > 0 && (
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Shipping</span>
-            <span className="font-medium text-black">${shipping.toFixed(2)}</span>
-          </div>
-        )}
-
-        {discount > 0 && (
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Discount</span>
-            <span className="font-medium text-green-600">-${discount.toFixed(2)}</span>
-          </div>
-        )}
-
-        {giftWrap && (
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Gift Wrap</span>
-            <span className="font-medium text-black">${giftWrapPrice.toFixed(2)}</span>
-          </div>
-        )}
+        <div className="flex items-center justify-between pt-11">
+          <span
+            style={{ fontFamily: "Volkhov" }}
+            className="text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] capitalize"
+          >
+            Subtotal
+          </span>
+          <span
+            style={{ fontFamily: "Volkhov" }}
+            className="text-center align-middle text-[22px] leading-[32px] font-normal tracking-[0px] capitalize"
+          >
+            ${total}
+          </span>
+        </div>
+        <Link to="/checkout" className="mt-7 flex justify-center rounded-xl bg-black py-6">
+          <button
+            className="text-[16px] leading-[100%] font-normal tracking-[0px] text-white"
+            style={{ fontFamily: "Poppins" }}
+          >
+            Checkout
+          </button>
+        </Link>
+        <Link
+          to="./cart"
+          className="cursor-pointer pt-3.5 text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] capitalize underline decoration-solid decoration-0"
+          onClick={() => {}}
+          style={{ fontFamily: "Volkhov" }}
+        >
+          View Cart
+        </Link>
       </div>
-
-      {/* Total */}
-      <div className="mb-6 flex items-center justify-between border-t pt-4">
-        <span className="font-medium text-gray-900">Total</span>
-        <span className="text-2xl font-bold text-black">${total.toFixed(2)}</span>
-      </div>
-
-      {/* Checkout Button */}
-      <Link
-        to="/checkout"
-        className="mb-3 block w-full rounded-lg bg-black py-3 text-center font-medium text-white transition-colors hover:bg-gray-800"
-      >
-        Checkout
-      </Link>
-
-      {/* View Cart Link */}
-      <Link to="/cart" className="block w-full text-center text-sm text-gray-600 underline hover:text-black">
-        View Cart
-      </Link>
     </div>
   );
 };

@@ -1,111 +1,138 @@
 import React, { useState } from "react";
-import { X, Minus, Plus } from "lucide-react";
+import { Minus, Plus, ChevronRight } from "lucide-react";
+import type { CartItem } from "../../../types/cart.types";
 
 interface CartItemProps {
   id: string;
   name: string;
   price: number;
-  image: string;
   color?: string;
   size?: string;
   quantity: number;
   onRemove?: (id: string) => void;
   onUpdateQuantity?: (id: string, quantity: number) => void;
 }
+const CartItem: React.FC<CartItemProps> = ({ id, name, price, color, quantity, onRemove, onUpdateQuantity }) => {
+  const [itemQuantity, setItemQuantity] = useState(quantity);
 
-const CartItem: React.FC<CartItemProps> = ({
-  id,
-  name,
-  price,
-  image,
-  color,
-  size,
-  quantity: initialQuantity,
-  onRemove,
-  onUpdateQuantity
-}) => {
-  const [quantity, setQuantity] = useState(initialQuantity);
+  const handleDecrease = () => {
+    if (itemQuantity > 1) {
+      const newQuantity = itemQuantity - 1;
+      setItemQuantity(newQuantity);
+      onUpdateQuantity?.(id, newQuantity);
+    }
+  };
 
-  const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity < 1) return;
-    setQuantity(newQuantity);
+  const handleIncrease = () => {
+    const newQuantity = itemQuantity + 1;
+    setItemQuantity(newQuantity);
     onUpdateQuantity?.(id, newQuantity);
   };
 
-  const total = price * quantity;
-
   return (
-    <div className="grid grid-cols-12 items-center gap-4 border-b px-6 py-6 transition-colors hover:bg-gray-50">
-      {/* Product Info */}
-      <div className="col-span-5 flex items-center gap-4">
-        {/* Image */}
-        <div className="h-24 w-20 flex-shrink-0 overflow-hidden rounded bg-gray-100">
-          <img src={image} alt={name} className="h-full w-full object-cover" />
-        </div>
-
-        {/* Details */}
-        <div className="min-w-0 flex-1">
-          <h3 className="mb-2 truncate font-medium text-black">{name}</h3>
-          {color && (
-            <p className="text-sm text-gray-500">
-              <span className="font-medium">Color:</span> {color}
-            </p>
-          )}
-          {size && (
-            <p className="text-sm text-gray-500">
-              <span className="font-medium">Size:</span> {size}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Price */}
-      <div className="col-span-2 text-center">
-        <span className="font-medium text-black">${price.toFixed(2)}</span>
-      </div>
-
-      {/* Quantity */}
-      <div className="col-span-3 flex justify-center">
-        <div className="flex items-center rounded border">
-          <button
-            onClick={() => handleQuantityChange(quantity - 1)}
-            className="p-2 transition-colors hover:bg-gray-100"
-            disabled={quantity <= 1}
+      <div className="container mx-auto mt-20 flex flex-col gap-[65px]">
+        <div className="flex flex-col items-center justify-center gap-6">
+          <h3
+            className="text-center align-middle text-[42px] leading-8 font-normal tracking-[0px] text-black capitalize"
+            style={{ fontFamily: "Volkhnov" }}
           >
-            <Minus className="h-4 w-4" />
-          </button>
-
-          <input
-            type="number"
-            value={quantity}
-            onChange={e => handleQuantityChange(Number(e.target.value))}
-            className="w-12 border-x py-2 text-center focus:outline-none"
-            min="1"
-          />
-
-          <button
-            onClick={() => handleQuantityChange(quantity + 1)}
-            className="p-2 transition-colors hover:bg-gray-100"
-          >
-            <Plus className="h-4 w-4" />
-          </button>
+            Shopping Cart
+          </h3>
+          <div className="flex items-center gap-3.5">
+            <p
+              className="text-center align-middle text-[15px] leading-[22.5px] font-normal tracking-[0px]"
+              style={{ fontFamily: "Jost" }}
+            >
+              Home
+            </p>
+            <ChevronRight />
+            <p
+              className="text-center align-middle text-[16px] leading-6 font-normal tracking-[0px]"
+              style={{ fontFamily: "Jost" }}
+            >
+              Your Shopping Cart
+            </p>
+          </div>
         </div>
-      </div>
-
-      {/* Total */}
-      <div className="col-span-2 flex items-center justify-end gap-4 text-right">
-        <span className="font-bold text-black">${total.toFixed(2)}</span>
-
-        {/* Remove Button */}
-        <button
-          onClick={() => onRemove?.(id)}
-          className="text-gray-400 transition-colors hover:text-red-500"
-          aria-label="Remove item"
-        >
-          <X className="h-5 w-5" />
-        </button>
-      </div>
-    </div>
+        <div className="container flex flex-col gap-[35px] px-5 pt-16">
+          <div className="flex items-center justify-between">
+            <p
+              className="text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] capitalize"
+              style={{ fontFamily: "Volkhov" }}
+            >
+              Product
+            </p>
+            <p
+              className="text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] capitalize"
+              style={{ fontFamily: "Volkhov" }}
+            >
+              Price
+            </p>
+            <p
+              className="text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] capitalize"
+              style={{ fontFamily: "Volkhov" }}
+            >
+              Quantity
+            </p>
+            <p
+              className="text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] capitalize"
+              style={{ fontFamily: "Volkhov" }}
+            >
+              Total
+            </p>
+          </div>
+          <div className="borde-[1px] border-[rgba(0, 0, 0, 0.39)] flex items-start border-t border-b pt-[35px] pb-11">
+            <div className="flex items-start gap-[22px]">
+              <img src="../../../../public/images/cart/Product Image.png" alt="product-item" />
+              <div className="flex flex-col items-start gap-3.5">
+                <span
+                  className="w-[200px] align-middle text-[22px] leading-[100%] font-normal tracking-[0px] capitalize"
+                  style={{ fontFamily: "Volkhov" }}
+                >
+                  {name}
+                </span>
+                <span
+                  style={{ fontFamily: "Poppins" }}
+                  className="text-center align-middle text-[22px] leading-[42px] font-normal tracking-[0px] text-[#8A8A8A] capitalize"
+                >
+                  Color: {color}
+                </span>
+                <button
+                  className="text-center align-middle text-[22px] leading-[42px] font-normal tracking-[0px] text-[#8A8A8A] capitalize underline decoration-solid decoration-0"
+                  style={{ fontFamily: "Poppins" }}
+                  onClick={() => onRemove?.(id)}
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+            <span
+              className="pl-[100px] text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] capitalize"
+              style={{ fontFamily: "Volkhov" }}
+            >
+              ${price}
+            </span>
+            <div className="ml-[375px] flex items-center gap-[19px] border border-[#8A8A8A] px-2.5 py-2">
+              <Minus className="cursor-pointer" onClick={handleDecrease} />
+              <span
+                className="mx-4 text-center align-middle text-[25.02px] leading-[100%] font-normal tracking-[0px] text-[#8A8A8A] capitalize"
+                style={{ fontFamily: "Poppins" }}
+              >
+                {itemQuantity}
+              </span>
+              <Plus className="cursor-pointer" onClick={handleIncrease} />
+            </div>
+            <div className="ml-[370px]">
+              <span
+                className="text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] text-black capitalize"
+                style={{ fontFamily: "Volkhov" }}
+              >
+                ${(price * itemQuantity).toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+    </div> 
   );
 };
 
