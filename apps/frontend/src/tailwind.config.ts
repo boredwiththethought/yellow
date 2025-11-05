@@ -8,6 +8,7 @@ export default {
       fontFamily: {
         rage: ["rageitalic", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
+        volkov: ["Volkov", "sans-serif"],
       }
     },
   },
