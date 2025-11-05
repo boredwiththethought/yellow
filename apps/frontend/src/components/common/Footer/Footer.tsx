@@ -1,92 +1,46 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import FooterButton from "./FooterButton";
+import { FooterNavbar } from "./FooterNavbar";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="mt-auto border-t bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {/* Logo & Description */}
-          <div>
-            <Link to="/" className="mb-4 block text-2xl font-bold text-black">
-              FASCO
-            </Link>
-            <p className="mb-4 text-sm text-gray-600">
-              Your one-stop fashion destination for the latest trends and styles.
-            </p>
+    <footer className="container mx-auto bg-white px-4 py-6">
+      <div className="flex flex-col gap-12">
+        <div className="flex items-center justify-around">
+          <img src="../../../../public/images/footer/footer-man.png" alt="show-man-footer" />
+          <div className="flex flex-col items-center justify-center gap-[30px]">
+            <div className="flex flex-1 flex-col gap-[30px] p-10 drop-shadow-md">
+              <div className="flex flex-col items-center justify-center gap-5 text-center">
+                <h2
+                  className="text-center text-[46px] leading-[100%] font-normal tracking-[0%] text-[#484848]"
+                  style={{ fontFamily: "Volkhov" }}
+                >
+                  Subscribe To Our Newsletter
+                </h2>
+                <p
+                  className="text-center text-[16px] leading-[26px] font-normal tracking-[0%] text-[#8A8A8A]"
+                  style={{ fontFamily: "Poppins" }}
+                >
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scelerisque duis <br /> ultrices sollicitudin
+                  aliquam sem. Scelerisque duis ultrices sollicitudin{" "}
+                </p>
+              </div>
+              <div className="flex w-full max-w-md">
+                <p
+                  className="pl-5 text-[22px] leading-[26px] font-normal tracking-[0%] text-[#8A8A8A]"
+                  style={{ fontFamily: "Poppins" }}
+                >
+                  michael@ymail.com
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <FooterButton text="Subscribe Now" onClick={() => alert("Subscribed!")} />
+            </div>
           </div>
-
-          {/* Shop */}
-          <div>
-            <h3 className="mb-4 font-semibold text-black">Shop</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/shop" className="text-sm text-gray-600 hover:text-black">
-                  All Products
-                </Link>
-              </li>
-              <li>
-                <Link to="/shop/women" className="text-sm text-gray-600 hover:text-black">
-                  Women
-                </Link>
-              </li>
-              <li>
-                <Link to="/shop/men" className="text-sm text-gray-600 hover:text-black">
-                  Men
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Help */}
-          <div>
-            <h3 className="mb-4 font-semibold text-black">Help</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/contact" className="text-sm text-gray-600 hover:text-black">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-sm text-gray-600 hover:text-black">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link to="/shipping" className="text-sm text-gray-600 hover:text-black">
-                  Shipping
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Pages */}
-          <div>
-            <h3 className="mb-4 font-semibold text-black">Pages</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/about" className="text-sm text-gray-600 hover:text-black">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-sm text-gray-600 hover:text-black">
-                  Terms & Conditions
-                </Link>
-              </li>
-              <li>
-                <Link to="/privacy" className="text-sm text-gray-600 hover:text-black">
-                  Privacy Policy
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <img src="../../../../public/images/footer/foter-girl.png" alt="show-woman-footer" />
         </div>
-
-        {/* Bottom */}
-        <div className="mt-8 border-t pt-8 text-center">
-          <p className="text-sm text-gray-600">Copyright © {new Date().getFullYear()} FASCO. All Rights Reserved.</p>
-        </div>
+        < FooterNavbar />
       </div>
     </footer>
   );
