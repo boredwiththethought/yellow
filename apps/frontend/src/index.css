@@ -85,3 +85,13 @@
   font-weight: bold;
   font-style: normal; 
 }
+
+@font-face {
+  font-family: 'Digital Numbers';
+  src: url('./assets/fonts/numbers/DigitalNumbers-Regular.ttf') format('truetype');
+}
+
+.sale-stroke {
+  -webkit-text-stroke: 1px #484848; /* толщина и цвет */
+  color: transparent;               /* убрать заливку */
+}
