@@ -55,7 +55,7 @@ const MainProduct: React.FC = () => {
               {product.name}
             </h1>
             <span
-              className="text-[16px] leading-[100%] font-normal tracking-[0%] text-black underline decoration-solid decoration-0 underline-offset-0"
+              className="text-[16px] leading-[100%] font-normal tracking-[0%] text-black underline decoration-solid decoration-0"
               style={{ fontFamily: "Poppins" }}
             >
               DESCRIPTION
