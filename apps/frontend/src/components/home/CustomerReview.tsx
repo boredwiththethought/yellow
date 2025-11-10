@@ -59,7 +59,7 @@ const CustomerReview = () => {
   const { left, center, right } = getIndices();
 
   return (
-    <div className="mt-20 w-full bg-[#FAFAFA] md:mt-[150px]">
+    <div className="mt-20 w-full bg-[#FAFAFA] md:mt-[150px] mb-[150px]">
       <div className="container mx-auto flex flex-col items-center gap-10 px-4 md:gap-[70px]">
         {/* Header Section */}
         <div className="flex flex-col items-center gap-3 pt-[60px] md:gap-5 md:pt-[100px]">

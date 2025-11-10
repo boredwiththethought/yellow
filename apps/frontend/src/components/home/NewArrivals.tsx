@@ -530,7 +530,7 @@ export default function NewArrivals() {
       <button
         className="cursor-pointer rounded-[10px] bg-black px-[62px] py-5 hover:bg-gray-800 focus:bg-gray-800"
         style={{ fontFamily: "Poppins" }}
-        onClick={() => navigate("/shop-page")}
+        onClick={() => navigate("/shop")}
       >
         <span className="text-center text-[16px] leading-[100%] font-normal tracking-[0px] text-white">View More</span>
       </button>

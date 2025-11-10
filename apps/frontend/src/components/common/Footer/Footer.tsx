@@ -4,7 +4,7 @@ import { FooterNavbar } from "./FooterNavbar";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="container mx-auto bg-white px-4 py-6">
+    <footer className="container mx-auto bg-white px-4 py-6 mt-[150px]">
       <div className="flex flex-col gap-12">
         <div className="flex items-center justify-around">
           <img src="../../../../public/images/footer/footer-man.png" alt="show-man-footer" />

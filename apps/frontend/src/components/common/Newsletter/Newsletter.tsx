@@ -22,10 +22,7 @@ const Newsletter: React.FC = () => {
     setLoading(true);
 
     try {
-      // TODO: Добавить API запрос позже
-      // await subscribeToNewsletter(email);
 
-      // Симуляция задержки
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       toast.success("Successfully subscribed!");
@@ -83,7 +80,7 @@ const Newsletter: React.FC = () => {
             </form>
           </div>
 
-          {/* Right Image */}
+
           <div className="hidden md:block">
             <img
               src="/images/newsletter/model-2.png"

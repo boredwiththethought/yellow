@@ -1,12 +1,13 @@
-// src/App.tsx
+
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-// Импорты БЕЗ алиасов (напрямую)
+
 import CartPage from "./pages/CartPage/CartPage";
 import ThankYouPage from "./pages/ThankYouPage/ThankYouPage";
 import HomePage from "./pages/HomePage/HomePage";
 import ScrollToTop from "./components/ScrollToTop";
+import ShopPage from "./pages/ShopPage/ShopPage";
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
         <Route path="/" element={<HomePage />} />
 
         {/* Cart Page */}
+        <Route path="/shop" element={<ShopPage />} />
         <Route path="/cart" element={<CartPage />} />
 
         {/* Thank You Page */}

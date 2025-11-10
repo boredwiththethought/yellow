@@ -25,146 +25,180 @@ const productInfo = {
 
 const MainProduct: React.FC = () => {
   const product: mainProductInformation = productInfo;
+  
   return (
     <div className="flex flex-col">
-      <div className="relative mt-[150px] grid w-full grid-cols-2">
-        <div className="relative flex items-center justify-center overflow-hidden bg-[#DADADA]">
-          <img src="../../../public/images/home/main-product/main-1.png" alt="" />
-          {/* Левая диагональная подложка */}
-          <div
-            className="absolute top-0 left-0 -z-10 h-full w-full"
-            style={{
-              clipPath: "polygon(0 0, 100% 0, 100% 80%, 0 100%)",
-              background: "#DADADA"
-            }}
-          />
+      <div className="relative mt-[150px] w-full overflow-hidden min-h-[600px]">
+        <div className="absolute inset-0">
+          <svg 
+            className="w-full h-full" 
+            preserveAspectRatio="none"
+            viewBox="0 0 1000 1000"
+          >
+            <polygon 
+              points="0,0 500,0 450,1000 0,1000" 
+              fill="#F8F8F8"
+            />
+            
+            <polygon 
+              points="500,0 1000,0 1000,1000 450,1000" 
+              fill="#DADADA"
+            />
+            
+            <line 
+              x1="500" 
+              y1="0" 
+              x2="450" 
+              y2="1000" 
+              stroke="black" 
+              strokeWidth="2"
+            />
+          </svg>
         </div>
-        <div className="absolute top-0 left-1/2 h-[calc(100%+4%)] w-0.5 origin-top rotate-18 bg-black"></div>
-        {product.id === 1 && (
-          <div className="flex flex-col items-start justify-center gap-5 bg-[#DADADA]">
-            <p
-              className="text-[16px] leading-[100%] font-normal tracking-[0px] text-[#767676]"
-              style={{ fontFamily: "Poppins" }}
-            >
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
+          {/* Left Side - Image */}
+          <div className="relative flex items-center justify-center overflow-hidden">
+            <img 
+              src="/images/home/main-product/main-1.png" 
+              alt="Peaky Blinders" 
+              className="relative z-10 h-full w-[700px]  object-contain "
+              onError={(e) => {
+                e.currentTarget.src = 'https://via.placeholder.com/400x600?text=Product+Image';
+              }}
+            />
+          </div>
+
+          {/* Right Side - Product Info */}
+          <div className="relative flex flex-col items-start justify-center gap-5 px-12 py-16 lg:px-20">
+            {/* Collection */}
+            <p className="text-base font-normal text-[#767676]" style={{ fontFamily: "Poppins" }}>
               {product.collection}
             </p>
-            <h1
-              style={{ fontFamily: "Volkhov" }}
-              className="text-[46px] leading-[100%] font-normal tracking-[0px] text-[#484848]"
-            >
+
+            {/* Product Name */}
+            <h1 className="text-[46px] font-normal leading-tight text-[#484848]" style={{ fontFamily: "Volkhov" }}>
               {product.name}
             </h1>
-            <span
-              className="text-[16px] leading-[100%] font-normal tracking-[0%] text-black underline decoration-solid decoration-0"
-              style={{ fontFamily: "Poppins" }}
-            >
+
+            {/* Description Label */}
+            <span className="text-base font-normal text-black underline" style={{ fontFamily: "Poppins" }}>
               DESCRIPTION
             </span>
-            <span
-              style={{ fontFamily: "Poppins" }}
-              className="w-[515px] text-[16px] leading-[100%] font-normal tracking-[0%] text-[#767676]"
-            >
+
+            {/* Description Text */}
+            <p className="max-w-[515px] text-base font-normal leading-relaxed text-[#767676]" style={{ fontFamily: "Poppins" }}>
               {product.description}
-            </span>
+            </p>
+
+            {/* Size */}
             <div className="flex items-center gap-3.5">
-              <span
-                className="text-[16px] leading-[100%] font-normal tracking-[0%] text-[#767676]"
-                style={{ fontFamily: "Poppins" }}
-              >
+              <span className="text-base font-normal text-[#767676]" style={{ fontFamily: "Poppins" }}>
                 Size:
               </span>
-              <span
-                className="rounded-[10px] bg-black px-5 py-1.5 text-[16px] leading-[100%] font-normal tracking-[0%] text-white"
-                style={{ fontFamily: "Poppins" }}
-              >
+              <span className="rounded-[10px] bg-black px-5 py-1.5 text-base font-normal text-white" style={{ fontFamily: "Poppins" }}>
                 {product.size}
               </span>
             </div>
+
+            {/* Price */}
             <div className="flex items-end gap-[0.25px]">
-              <span className="text-[28px] leading-[100%] font-medium tracking-[0]" style={{ fontFamily: "Poppins" }}>
+              <span className="text-[28px] font-medium leading-none" style={{ fontFamily: "Poppins" }}>
                 {product.priceCurrency}
               </span>
-              <span className="text-[28px] leading-[100%] font-medium tracking-[0]" style={{ fontFamily: "Poppins" }}>
+              <span className="text-[28px] font-medium leading-none" style={{ fontFamily: "Poppins" }}>
                 {product.price}
               </span>
-              <span className="text-[24px] leading-[100%] font-medium tracking-[0]" style={{ fontFamily: "Poppins" }}>
+              <span className="text-[24px] font-medium leading-none" style={{ fontFamily: "Poppins" }}>
                 {product.priceCent}
               </span>
             </div>
-            <button
-              className="cursor-pointer rounded-[10px] bg-black px-[70px] py-5 text-[16px] leading-[100%] font-normal tracking-[0] text-white"
-              style={{ fontFamily: "Poppins" }}
-            >
+
+            {/* Buy Button */}
+            <button className="cursor-pointer rounded-[10px] bg-black px-[70px] py-5 text-base font-normal text-white transition-colors hover:bg-gray-800" style={{ fontFamily: "Poppins" }}>
               Buy Now
             </button>
           </div>
-        )}
+        </div>
       </div>
-      <div className="container mx-auto flex w-full justify-between px-6 py-[70px]">
+
+      {/* Features Section */}
+      <div className="container mx-auto flex w-full flex-wrap justify-between gap-8 px-6 py-[70px] lg:flex-nowrap">
+        {/* High Quality */}
         <div className="flex items-center gap-3">
-          <img src="../../../public/images/home/main-product/review/quality.svg" alt="" />
-          <div className="flex h-full flex-col items-start justify-between gap-1.5">
-            <p
-              style={{ fontFamily: "Poppins" }}
-              className="text-[20px] leading-[100%] font-medium tracking-[0] text-[#484848]"
-            >
+          <img 
+            src="/images/home/main-product/review/quality.svg" 
+            alt="High Quality" 
+            className="h-12 w-12"
+            onError={(e) => {
+              e.currentTarget.src = 'https://via.placeholder.com/48?text=HQ';
+            }}
+          />
+          <div className="flex flex-col gap-1.5">
+            <p className="text-xl font-medium leading-tight text-[#484848]" style={{ fontFamily: "Poppins" }}>
               High Quality
             </p>
-            <span
-              style={{ fontFamily: "Poppins" }}
-              className="text-[16px] leading-[26px] font-normal tracking-[0] text-[#484848]"
-            >
+            <span className="text-base font-normal leading-relaxed text-[#484848]" style={{ fontFamily: "Poppins" }}>
               crafted from top materials
             </span>
           </div>
         </div>
+
+        {/* Warranty Protection */}
         <div className="flex items-center gap-3">
-          <img src="../../../public/images/home/main-product/review/r-2.svg" alt="" />
-          <div className="flex h-full flex-col items-start justify-between gap-1.5">
-            <p
-              style={{ fontFamily: "Poppins" }}
-              className="text-[20px] leading-[100%] font-medium tracking-[0] text-[#484848]"
-            >
-              Warrany Protection
+          <img 
+            src="/images/home/main-product/review/r-2.svg" 
+            alt="Warranty" 
+            className="h-12 w-12"
+            onError={(e) => {
+              e.currentTarget.src = 'https://via.placeholder.com/48?text=WP';
+            }}
+          />
+          <div className="flex flex-col gap-1.5">
+            <p className="text-xl font-medium leading-tight text-[#484848]" style={{ fontFamily: "Poppins" }}>
+              Warranty Protection
             </p>
-            <span
-              style={{ fontFamily: "Poppins" }}
-              className="text-[16px] leading-[26px] font-normal tracking-[0] text-[#484848]"
-            >
+            <span className="text-base font-normal leading-relaxed text-[#484848]" style={{ fontFamily: "Poppins" }}>
               Over 2 years
             </span>
           </div>
         </div>
+
+        {/* Free Shipping */}
         <div className="flex items-center gap-3">
-          <img src="../../../public/images/home/main-product/review/r-3.svg" alt="" />
-          <div className="flex h-full flex-col items-start justify-between gap-1.5">
-            <p
-              style={{ fontFamily: "Poppins" }}
-              className="text-[20px] leading-[100%] font-medium tracking-[0] text-[#484848]"
-            >
+          <img 
+            src="/images/home/main-product/review/r-3.svg" 
+            alt="Free Shipping" 
+            className="h-12 w-12"
+            onError={(e) => {
+              e.currentTarget.src = 'https://via.placeholder.com/48?text=FS';
+            }}
+          />
+          <div className="flex flex-col gap-1.5">
+            <p className="text-xl font-medium leading-tight text-[#484848]" style={{ fontFamily: "Poppins" }}>
               Free Shipping
             </p>
-            <span
-              style={{ fontFamily: "Poppins" }}
-              className="text-[16px] leading-[26px] font-normal tracking-[0] text-[#484848]"
-            >
+            <span className="text-base font-normal leading-relaxed text-[#484848]" style={{ fontFamily: "Poppins" }}>
               Order over 150 $
             </span>
           </div>
         </div>
+
+        {/* 24/7 Support */}
         <div className="flex items-center gap-3">
-          <img src="../../../public/images/home/main-product/review/r-4.svg" alt="" />
-          <div className="flex h-full flex-col items-start justify-between gap-1.5">
-            <p
-              style={{ fontFamily: "Poppins" }}
-              className="text-[20px] leading-[100%] font-medium tracking-[0] text-[#484848]"
-            >
+          <img 
+            src="/images/home/main-product/review/r-4.svg" 
+            alt="Support" 
+            className="h-12 w-12"
+            onError={(e) => {
+              e.currentTarget.src = 'https://via.placeholder.com/48?text=24/7';
+            }}
+          />
+          <div className="flex flex-col gap-1.5">
+            <p className="text-xl font-medium leading-tight text-[#484848]" style={{ fontFamily: "Poppins" }}>
               24 / 7 Support
             </p>
-            <span
-              style={{ fontFamily: "Poppins" }}
-              className="text-[16px] leading-[26px] font-normal tracking-[0] text-[#484848]"
-            >
+            <span className="text-base font-normal leading-relaxed text-[#484848]" style={{ fontFamily: "Poppins" }}>
               Dedicated support
             </span>
           </div>
