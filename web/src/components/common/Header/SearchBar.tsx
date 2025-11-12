@@ -36,7 +36,7 @@ export const SearchBar = () => {
         </form>
       </div>
 
-      {/* Mobile Search Toggle */}
+
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="rounded-full p-2 transition-colors hover:bg-gray-100 md:hidden"
@@ -44,7 +44,7 @@ export const SearchBar = () => {
         <SearchIcon className="h-6 w-6" />
       </button>
 
-      {/* Mobile Search Overlay */}
+
       {isOpen && (
         <div className="fixed inset-0 z-50 bg-white p-4 md:hidden">
           <div className="flex items-center gap-4">

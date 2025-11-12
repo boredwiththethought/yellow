@@ -1,0 +1,1300 @@
+import "dotenv/config";
+import { connectToDatabase, getDb } from "../db.js";
+
+const fakeProducts = [
+  // ==================== SNEAKERS & SHOES ====================
+  {
+    name: "Nike Air Max 270",
+    brand: "Nike",
+    price: 149,
+    images: [
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Iconic Nike Air Max with visible air cushioning. Maximum comfort for all-day wear.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals", "best-sellers"],
+    sizes: ["38", "39", "40", "41", "42", "43", "44", "45"],
+    colors: ["White", "Black", "Blue"],
+    tags: ["sneakers", "sport", "comfort", "running"],
+    rating: 4.8,
+    reviews: 5200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Adidas Ultraboost",
+    brand: "Adidas",
+    price: 179,
+    images: [
+      "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Premium running shoes with Boost technology. Responsive cushioning and energy return.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals", "best-sellers"],
+    sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44"],
+    colors: ["Gray", "White", "Black"],
+    tags: ["running", "sport", "performance", "sneakers"],
+    rating: 4.9,
+    reviews: 6800,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Puma RS-X Sneakers",
+    brand: "Puma",
+    price: 129,
+    images: [
+      "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1605348532760-6753d2c43329?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Bold streetwear sneakers with chunky silhouette. Retro-futuristic design.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
+    colors: ["White", "Black", "Pink", "Blue"],
+    tags: ["sneakers", "street", "casual", "trendy"],
+    rating: 4.6,
+    reviews: 3400,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Converse Chuck Taylor All Star",
+    brand: "Converse",
+    price: 65,
+    images: [
+      "https://images.unsplash.com/photo-1605408499391-6368c628ef42?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Classic canvas sneakers. Timeless design that never goes out of style.",
+    category: "mens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+    colors: ["White", "Black", "Red", "Navy", "Beige"],
+    tags: ["sneakers", "casual", "classic", "canvas"],
+    rating: 4.7,
+    reviews: 8900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Vans Old Skool",
+    brand: "Vans",
+    price: 75,
+    images: [
+      "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1543508282-6319a3e2621f?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Iconic skate shoes with signature side stripe. Durable canvas and suede construction.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44"],
+    colors: ["Black", "White", "Navy", "Red"],
+    tags: ["sneakers", "skate", "casual", "street"],
+    rating: 4.8,
+    reviews: 7600,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "New Balance 574",
+    brand: "New Balance",
+    price: 95,
+    images: [
+      "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Retro running shoes with ENCAP midsole technology. Classic comfort and style.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["38", "39", "40", "41", "42", "43", "44", "45"],
+    colors: ["Gray", "Navy", "Burgundy", "Green"],
+    tags: ["sneakers", "retro", "comfort", "running"],
+    rating: 4.7,
+    reviews: 4200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== JEANS & PANTS ====================
+  {
+    name: "Levi's 501 Original Jeans",
+    brand: "Levis",
+    price: 89,
+    images: [
+      "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582552938357-32b906df40cb?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "The original blue jeans since 1873. Straight leg fit with button fly.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Blue", "Black", "Light Wash", "Dark Wash"],
+    tags: ["jeans", "casual", "classic", "denim"],
+    rating: 4.9,
+    reviews: 12000,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Casual Linen Shirt",
+    brand: "Levis",
+    price: 85,
+    images: [
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1602810318660-d2c46b09d6a9?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Comfortable casual linen shirt perfect for everyday wear. Breathable fabric with a relaxed fit.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Blue", "White", "Navy"],
+    tags: ["casual", "summer", "lightweight"],
+    rating: 4.5,
+    reviews: 3200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Skinny Fit Jeans",
+    brand: "Zara",
+    price: 65,
+    images: [
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1475178626620-a4d074967452?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Modern skinny fit jeans with stretch denim. Contemporary style for urban look.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Blue", "Gray"],
+    tags: ["jeans", "skinny", "modern", "denim"],
+    rating: 4.5,
+    reviews: 4100,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Cargo Pants",
+    brand: "Carhartt",
+    price: 78,
+    images: [
+      "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Durable cargo pants with multiple pockets. Perfect for outdoor activities.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Khaki", "Black", "Olive", "Navy"],
+    tags: ["cargo", "outdoor", "utility", "pants"],
+    rating: 4.7,
+    reviews: 3600,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Slim Fit Chinos",
+    brand: "Uniqlo",
+    price: 49,
+    images: [
+      "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Versatile slim fit chinos for any occasion. Comfortable stretch fabric with modern silhouette.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Beige", "Navy", "Olive", "Black"],
+    tags: ["chinos", "pants", "versatile"],
+    rating: 4.4,
+    reviews: 5900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== HOODIES & SWEATSHIRTS ====================
+  {
+    name: "Zara Oversized Hoodie",
+    brand: "Zara",
+    price: 59,
+    images: [
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1620799139834-6b8f844fbe61?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Trendy oversized hoodie with dropped shoulders. Perfect for streetwear style.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals", "best-sellers"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Beige", "Black", "Khaki", "Gray"],
+    tags: ["hoodie", "streetwear", "oversized", "casual"],
+    rating: 4.6,
+    reviews: 4800,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Champion Reverse Weave Hoodie",
+    brand: "Champion",
+    price: 85,
+    images: [
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Classic Champion hoodie with signature logo. Premium cotton blend construction.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Navy", "Gray", "Black", "Red"],
+    tags: ["hoodie", "sport", "classic", "comfortable"],
+    rating: 4.8,
+    reviews: 6200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Nike Tech Fleece Hoodie",
+    brand: "Nike",
+    price: 110,
+    images: [
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1620799140408-eec2d0d3c0ed?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Innovative Tech Fleece fabric for lightweight warmth. Modern athletic design.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Gray", "Navy"],
+    tags: ["athletic", "hoodie", "tech", "sportswear"],
+    rating: 4.9,
+    reviews: 7100,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Carhartt Crew Sweatshirt",
+    brand: "Carhartt",
+    price: 68,
+    images: [
+      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Durable crew neck sweatshirt. Built to last with heavyweight cotton.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Brown", "Black", "Navy", "Green"],
+    tags: ["sweatshirt", "durable", "workwear", "casual"],
+    rating: 4.7,
+    reviews: 5400,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== JACKETS & OUTERWEAR ====================
+  {
+    name: "Premium Denim Jacket",
+    brand: "Levis",
+    price: 125,
+    images: [
+      "https://images.unsplash.com/photo-1551028719-2ca1b8e4e5f2?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Classic denim jacket with modern fit. Made from premium denim with brass hardware.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["M", "L", "XL"],
+    colors: ["Dark Blue", "Light Blue", "Black"],
+    tags: ["denim", "jacket", "classic"],
+    rating: 5,
+    reviews: 5100,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "The North Face Jacket",
+    brand: "The North Face",
+    price: 199,
+    images: [
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1544923246-77307d790b20?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Technical outdoor jacket with waterproof protection. Insulated for cold weather.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Red", "Olive", "Navy"],
+    tags: ["jacket", "outdoor", "winter", "waterproof"],
+    rating: 4.9,
+    reviews: 8900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Bomber Jacket",
+    brand: "Alpha Industries",
+    price: 165,
+    images: [
+      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1520975916090-3105956ddef4?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Military-inspired bomber jacket. Classic MA-1 style with orange liner.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Navy", "Olive", "Burgundy"],
+    tags: ["bomber", "jacket", "military", "street"],
+    rating: 4.8,
+    reviews: 4700,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Leather Jacket",
+    brand: "Schott",
+    price: 599,
+    images: [
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1520975954732-35dd22299614?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Genuine leather motorcycle jacket. Premium craftsmanship and timeless style.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Brown"],
+    tags: ["leather", "jacket", "luxury", "motorcycle"],
+    rating: 5.0,
+    reviews: 3200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== T-SHIRTS & SHIRTS ====================
+  {
+    name: "H&M Cotton T-Shirt",
+    brand: "H&M",
+    price: 25,
+    images: [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1562087089-5e1c0c1ca6ff?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Essential cotton t-shirt. Soft fabric and classic fit for everyday wear.",
+    category: "mens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["White", "Black", "Gray", "Navy", "Green", "Blue"],
+    tags: ["basic", "tshirt", "cotton", "casual", "summer"],
+    rating: 4.3,
+    reviews: 8500,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Ralph Lauren Polo Shirt",
+    brand: "Ralph Lauren",
+    price: 89,
+    images: [
+      "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Classic polo shirt with signature pony logo. Pique cotton construction.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["White", "Navy", "Black", "Red", "Green"],
+    tags: ["polo", "classic", "preppy", "casual"],
+    rating: 4.8,
+    reviews: 9200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Uniqlo Oxford Shirt",
+    brand: "Uniqlo",
+    price: 39,
+    images: [
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1602810318660-d2c46b09d6a9?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Versatile oxford button-down shirt. Perfect for smart casual occasions.",
+    category: "mens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["White", "Blue", "Pink", "Light Gray"],
+    tags: ["shirt", "oxford", "formal", "versatile"],
+    rating: 4.6,
+    reviews: 6800,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== WOMEN'S DRESSES ====================
+  {
+    name: "Elegant Satin Dress",
+    brand: "Al Karam",
+    price: 95.5,
+    images: [
+      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Stunning satin dress with elegant drape. Perfect for special occasions and evening events.",
+    category: "womens-fashion",
+    collections: ["all-products", "new-arrivals", "best-sellers"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Black", "Navy", "Burgundy", "Emerald"],
+    tags: ["dress", "elegant", "evening", "formal"],
+    rating: 5,
+    reviews: 4100,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Floral Midi Dress",
+    brand: "Zara",
+    price: 79,
+    images: [
+      "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Charming midi dress with delicate floral pattern. Feminine silhouette with gathered waist.",
+    category: "womens-fashion",
+    collections: ["all-products", "new-arrivals", "best-sellers"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Floral Print", "White", "Pink"],
+    tags: ["midi", "floral", "feminine", "summer"],
+    rating: 4.7,
+    reviews: 5900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Summer Floral Dress",
+    brand: "Zara",
+    price: 45,
+    images: [
+      "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Light and breezy summer dress with floral print. Perfect for warm weather days.",
+    category: "womens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Floral", "White", "Yellow"],
+    tags: ["summer", "dress", "sale", "casual"],
+    rating: 4.5,
+    reviews: 3800,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Maxi Wrap Dress",
+    brand: "Mango",
+    price: 89,
+    images: [
+      "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1595341888851-b8c000000000?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Elegant maxi wrap dress. Flowing silhouette perfect for any occasion.",
+    category: "womens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Red", "Black", "Green", "Blue"],
+    tags: ["maxi", "dress", "wrap", "elegant"],
+    rating: 4.6,
+    reviews: 4200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Little Black Dress",
+    brand: "Zara",
+    price: 69,
+    images: [
+      "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Classic little black dress. Timeless piece for every wardrobe.",
+    category: "womens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Black"],
+    tags: ["dress", "lbd", "classic", "cocktail"],
+    rating: 4.9,
+    reviews: 7300,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== WOMEN'S TOPS ====================
+  {
+    name: "Silk Blouse",
+    brand: "Mango",
+    price: 75,
+    images: [
+      "https://images.unsplash.com/photo-1564859228273-274232fdb516?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Luxurious silk blouse with elegant drape. Perfect for office or evening wear.",
+    category: "womens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["White", "Black", "Navy", "Cream"],
+    tags: ["blouse", "silk", "elegant", "formal"],
+    rating: 4.7,
+    reviews: 3900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Knit Sweater",
+    brand: "H&M",
+    price: 45,
+    images: [
+      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1583744999095-5d5e28f4daa2?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Cozy knit sweater with ribbed details. Perfect for layering in cooler weather.",
+    category: "womens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Beige", "Gray", "Black", "Burgundy"],
+    tags: ["sweater", "knit", "cozy", "winter"],
+    rating: 4.4,
+    reviews: 5600,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Crop Top",
+    brand: "Zara",
+    price: 29,
+    images: [
+      "https://images.unsplash.com/photo-1564859228273-274232fdb516?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Trendy crop top with modern cut. Perfect for pairing with high-waisted bottoms.",
+    category: "womens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["White", "Black", "Pink", "Green"],
+    tags: ["crop", "top", "trendy", "casual"],
+    rating: 4.3,
+    reviews: 4100,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== ACCESSORIES ====================
+  {
+    name: "Leather Tote Bag",
+    brand: "Michael Kors",
+    price: 145,
+    images: [
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Spacious leather tote bag with multiple compartments. Perfect for work or travel.",
+    category: "womens-accessories",
+    collections: ["all-products", "accessories", "best-sellers"],
+    sizes: ["One Size"],
+    colors: ["Black", "Brown", "Tan", "White"],
+    tags: ["bag", "leather", "tote", "work"],
+    rating: 5,
+    reviews: 5300,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Leather Belt",
+    brand: "Gucci",
+    price: 125,
+    images: [
+      "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Premium leather belt with signature buckle. Essential accessory for any wardrobe.",
+    category: "mens-accessories",
+    collections: ["all-products", "accessories", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Brown"],
+    tags: ["belt", "leather", "luxury"],
+    rating: 5,
+    reviews: 4500,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Casio G-Shock Watch",
+    brand: "Casio",
+    price: 99,
+    images: [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Durable G-Shock watch with shock resistance. Perfect for active lifestyle.",
+    category: "mens-accessories",
+    collections: ["all-products", "accessories", "best-sellers"],
+    sizes: ["One Size"],
+    colors: ["Black", "Gray", "Blue", "Red"],
+    tags: ["watch", "sport", "durable", "tech"],
+    rating: 4.9,
+    reviews: 11000,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Ray-Ban Aviator Sunglasses",
+    brand: "Ray-Ban",
+    price: 159,
+    images: [
+      "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1508296695146-257a814070b4?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Iconic aviator sunglasses with UV protection. Timeless style and quality.",
+    category: "mens-accessories",
+    collections: ["all-products", "accessories"],
+    sizes: ["One Size"],
+    colors: ["Gold", "Silver", "Black"],
+    tags: ["sunglasses", "classic", "luxury", "summer"],
+    rating: 4.8,
+    reviews: 8700,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Apple AirPods Pro",
+    brand: "Apple",
+    price: 249,
+    images: [
+      "https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Premium wireless earbuds with active noise cancellation. Superior sound quality.",
+    category: "mens-accessories",
+    collections: [
+      "all-products",
+      "accessories",
+      "best-sellers",
+      "new-arrivals",
+    ],
+    sizes: ["One Size"],
+    colors: ["White"],
+    tags: ["tech", "audio", "wireless", "premium"],
+    rating: 4.9,
+    reviews: 15000,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Samsung Galaxy Buds2",
+    brand: "Samsung",
+    price: 139,
+    images: [
+      "https://images.unsplash.com/photo-1590658165737-15a047b7a03e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1598331519234-d8c80f9ffe65?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Compact wireless earbuds with great sound. Active noise cancellation included.",
+    category: "mens-accessories",
+    collections: ["all-products", "accessories", "new-arrivals"],
+    sizes: ["One Size"],
+    colors: ["White", "Green", "Gray", "Purple"],
+    tags: ["tech", "audio", "wireless", "compact"],
+    rating: 4.7,
+    reviews: 9400,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Wool Scarf",
+    brand: "Burberry",
+    price: 189,
+    images: [
+      "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Luxurious wool scarf with classic check pattern. Warm and stylish.",
+    category: "womens-accessories",
+    collections: ["all-products", "accessories"],
+    sizes: ["One Size"],
+    colors: ["Beige", "Black", "Gray", "Red"],
+    tags: ["scarf", "wool", "luxury", "winter"],
+    rating: 4.8,
+    reviews: 3600,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Crossbody Bag",
+    brand: "Coach",
+    price: 195,
+    images: [
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Compact crossbody bag with adjustable strap. Perfect for daily essentials.",
+    category: "womens-accessories",
+    collections: ["all-products", "accessories", "new-arrivals"],
+    sizes: ["One Size"],
+    colors: ["Black", "Brown", "Red", "Pink"],
+    tags: ["bag", "crossbody", "leather", "compact"],
+    rating: 4.7,
+    reviews: 4900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== WOMEN'S BOTTOMS ====================
+  {
+    name: "High-Waisted Jeans",
+    brand: "Zara",
+    price: 59,
+    images: [
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1582418702059-97ebafb35d09?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Flattering high-waisted jeans with straight leg. Modern fit and comfortable stretch.",
+    category: "womens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Blue", "Black", "White"],
+    tags: ["jeans", "high-waist", "casual", "denim"],
+    rating: 4.6,
+    reviews: 6700,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Pleated Midi Skirt",
+    brand: "Mango",
+    price: 55,
+    images: [
+      "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1590736969955-71cc94901144?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Elegant pleated midi skirt. Perfect for office or special occasions.",
+    category: "womens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Black", "Navy", "Beige", "Pink"],
+    tags: ["skirt", "pleated", "midi", "elegant"],
+    rating: 4.5,
+    reviews: 3800,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Yoga Leggings",
+    brand: "Lululemon",
+    price: 98,
+    images: [
+      "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1588117305388-c2631a279f82?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "High-performance yoga leggings with four-way stretch. Moisture-wicking and squat-proof.",
+    category: "womens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["Black", "Navy", "Gray", "Burgundy"],
+    tags: ["leggings", "yoga", "sport", "activewear"],
+    rating: 4.9,
+    reviews: 13000,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Linen Shorts",
+    brand: "H&M",
+    price: 35,
+    images: [
+      "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1591184369488-0d1a7a34fad4?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Comfortable linen shorts for summer. Relaxed fit with elastic waist.",
+    category: "womens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["XS", "S", "M", "L", "XL"],
+    colors: ["White", "Beige", "Black", "Blue"],
+    tags: ["shorts", "linen", "summer", "casual"],
+    rating: 4.3,
+    reviews: 4200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== SPORTSWEAR ====================
+  {
+    name: "Nike Dri-FIT Running Shirt",
+    brand: "Nike",
+    price: 45,
+    images: [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Lightweight running shirt with Dri-FIT technology. Moisture-wicking for optimal performance.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "White", "Navy", "Red"],
+    tags: ["sport", "running", "activewear", "performance"],
+    rating: 4.7,
+    reviews: 5900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Adidas Training Pants",
+    brand: "Adidas",
+    price: 65,
+    images: [
+      "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Versatile training pants with tapered fit. Perfect for gym or casual wear.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Black", "Gray", "Navy"],
+    tags: ["sport", "training", "athletic", "pants"],
+    rating: 4.6,
+    reviews: 4800,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Under Armour Compression Shirt",
+    brand: "Under Armour",
+    price: 55,
+    images: [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1622445275463-afa2ab738c34?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Compression shirt for enhanced performance. Supports muscles and wicks away sweat.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "White", "Red", "Blue"],
+    tags: ["compression", "sport", "performance", "training"],
+    rating: 4.8,
+    reviews: 6200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Puma Sports Bra",
+    brand: "Puma",
+    price: 42,
+    images: [
+      "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1580870069867-74c57ee60d19?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "High-support sports bra for intense workouts. Moisture-wicking fabric.",
+    category: "womens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Black", "White", "Pink", "Purple"],
+    tags: ["sportsbra", "activewear", "workout", "sport"],
+    rating: 4.7,
+    reviews: 5100,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== WINTER WEAR ====================
+  {
+    name: "Wool Blend Sweater",
+    brand: "Uniqlo",
+    price: 65,
+    images: [
+      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1620799140408-eec2d0d3c0ed?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Warm and cozy wool blend sweater. Perfect for cold weather with a classic crew neck design.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Gray", "Navy", "Burgundy", "Black"],
+    tags: ["sweater", "winter", "warm", "wool"],
+    rating: 4.6,
+    reviews: 4800,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Cashmere Cardigan",
+    brand: "J.Crew",
+    price: 145,
+    images: [
+      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Luxurious cashmere cardigan. Soft and warm with button-front closure.",
+    category: "womens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["XS", "S", "M", "L"],
+    colors: ["Beige", "Gray", "Navy", "Black"],
+    tags: ["cardigan", "cashmere", "luxury", "winter"],
+    rating: 4.9,
+    reviews: 3200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Puffer Jacket",
+    brand: "Uniqlo",
+    price: 89,
+    images: [
+      "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1544923408-75c5cef46f14?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Lightweight puffer jacket with down insulation. Packable and warm.",
+    category: "mens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Black", "Navy", "Olive", "Red"],
+    tags: ["puffer", "jacket", "winter", "lightweight"],
+    rating: 4.7,
+    reviews: 8100,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Fleece Jacket",
+    brand: "Patagonia",
+    price: 119,
+    images: [
+      "https://images.unsplash.com/photo-1544923408-75c5cef46f14?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Classic fleece jacket for outdoor adventures. Warm, breathable, and durable.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Navy", "Gray", "Green"],
+    tags: ["fleece", "outdoor", "jacket", "winter"],
+    rating: 4.8,
+    reviews: 6900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== FORMAL WEAR ====================
+  {
+    name: "Tailored Blazer",
+    brand: "Hugo Boss",
+    price: 395,
+    images: [
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1594938291221-94f18cbb5660?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Premium tailored blazer with perfect fit. Sophisticated style for business and formal events.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Navy", "Charcoal"],
+    tags: ["blazer", "formal", "business", "tailored"],
+    rating: 4.9,
+    reviews: 4600,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Dress Shirt",
+    brand: "Brooks Brothers",
+    price: 89,
+    images: [
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1602810318660-d2c46b09d6a9?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Classic dress shirt with non-iron fabric. Professional look with easy care.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["White", "Light Blue", "Pink"],
+    tags: ["shirt", "formal", "dress", "business"],
+    rating: 4.7,
+    reviews: 7200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Silk Tie",
+    brand: "Hermès",
+    price: 195,
+    images: [
+      "https://images.unsplash.com/photo-1585069792731-68e0271a29d3?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1589756823695-278bc8356c99?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Luxurious silk tie with elegant pattern. Perfect finishing touch for formal attire.",
+    category: "mens-accessories",
+    collections: ["all-products", "accessories"],
+    sizes: ["One Size"],
+    colors: ["Navy", "Red", "Blue", "Green"],
+    tags: ["tie", "silk", "formal", "luxury"],
+    rating: 5.0,
+    reviews: 2800,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Dress Pants",
+    brand: "Hugo Boss",
+    price: 159,
+    images: [
+      "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1594633313593-bab3825d0caf?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Tailored dress pants with flat front. Classic fit for professional settings.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Black", "Navy", "Gray", "Charcoal"],
+    tags: ["pants", "formal", "dress", "tailored"],
+    rating: 4.8,
+    reviews: 5400,
+    inStock: true,
+    createdAt: new Date(),
+  },
+
+  // ==================== CASUAL BASICS ====================
+  {
+    name: "Basic Cotton T-Shirt 3-Pack",
+    brand: "Uniqlo",
+    price: 29,
+    images: [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=60",
+      "https://images.unsplash.com/photo-1562087089-5e1c0c1ca6ff?auto=format&fit=crop&w=800&q=60",
+    ],
+    description:
+      "Pack of 3 essential cotton t-shirts. Perfect basics for everyday wear.",
+    category: "mens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["White", "Black", "Gray"],
+    tags: ["basic", "tshirt", "cotton", "value"],
+    rating: 4.5,
+    reviews: 12000,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Crew Neck Sweatshirt",
+    brand: "Gap",
+    price: 45,
+    images: [
+      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Classic crew neck sweatshirt in soft cotton blend. Comfortable for casual wear.",
+    category: "mens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: ["Gray", "Navy", "Black", "Green"],
+    tags: ["sweatshirt", "casual", "comfortable", "basic"],
+    rating: 4.4,
+    reviews: 6700,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Denim Shorts",
+    brand: "Levis",
+    price: 49,
+    images: [
+      "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1591184369488-0d1a7a34fad4?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Classic denim shorts with authentic 501 fit. Perfect for summer.",
+    category: "mens-fashion",
+    collections: ["all-products", "discount-deals"],
+    sizes: ["S", "M", "L", "XL"],
+    colors: ["Blue", "Black", "Light Wash"],
+    tags: ["shorts", "denim", "summer", "casual"],
+    rating: 4.5,
+    reviews: 5200,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Canvas Backpack",
+    brand: "Fjällräven",
+    price: 89,
+    images: [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1622260614927-3c2b40f69c0e?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Durable canvas backpack with laptop compartment. Classic design meets functionality.",
+    category: "mens-accessories",
+    collections: ["all-products", "accessories", "new-arrivals"],
+    sizes: ["One Size"],
+    colors: ["Black", "Navy", "Olive", "Red"],
+    tags: ["backpack", "canvas", "school", "travel"],
+    rating: 4.8,
+    reviews: 8900,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Ankle Boots",
+    brand: "Dr. Martens",
+    price: 149,
+    images: [
+      "https://images.unsplash.com/photo-1605812860427-4024433a70fd?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Iconic leather ankle boots with air-cushioned sole. Timeless style and durability.",
+    category: "mens-fashion",
+    collections: ["all-products", "best-sellers"],
+    sizes: ["39", "40", "41", "42", "43", "44", "45"],
+    colors: ["Black", "Brown"],
+    tags: ["boots", "leather", "classic", "durable"],
+    rating: 4.9,
+    reviews: 11000,
+    inStock: true,
+    createdAt: new Date(),
+  },
+  {
+    name: "Chelsea Boots",
+    brand: "Clarks",
+    price: 119,
+    images: [
+      "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?auto=format&fit=crop&w=800&q=80",
+    ],
+    description:
+      "Sleek Chelsea boots with elastic side panels. Versatile for casual or smart looks.",
+    category: "mens-fashion",
+    collections: ["all-products", "new-arrivals"],
+    sizes: ["39", "40", "41", "42", "43", "44"],
+    colors: ["Black", "Brown", "Tan"],
+    tags: ["boots", "chelsea", "leather", "elegant"],
+    rating: 4.7,
+    reviews: 6300,
+    inStock: true,
+    createdAt: new Date(),
+  },
+];
+
+const seedDatabase = async () => {
+  try {
+    console.log("🔌 Connecting to MongoDB...");
+    await connectToDatabase();
+    const db = getDb();
+    console.log("✅ Connected to MongoDB");
+
+    // Очистить коллекцию products
+    console.log("🗑️  Clearing existing products...");
+    await db.collection("products").deleteMany({});
+    console.log("✅ Products cleared");
+
+    // Добавить fake products
+    console.log("📦 Adding fake products...");
+    await db.collection("products").insertMany(fakeProducts);
+    console.log(`✅ Added ${fakeProducts.length} products`);
+
+    // Показать статистику
+    const stats = await db
+      .collection("products")
+      .aggregate([
+        {
+          $group: {
+            _id: "$category",
+            count: { $sum: 1 },
+          },
+        },
+      ])
+      .toArray();
+
+    console.log("\n📊 Products by category:");
+    stats.forEach((stat: any) => {
+      console.log(`  ${stat._id}: ${stat.count}`);
+    });
+
+    // Показать коллекции
+    const collections = await db
+      .collection("products")
+      .aggregate([
+        { $unwind: "$collections" },
+        {
+          $group: {
+            _id: "$collections",
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: { count: -1 } },
+      ])
+      .toArray();
+
+    console.log("\n📊 Products by collection:");
+    collections.forEach((coll: any) => {
+      console.log(`  ${coll._id}: ${coll.count}`);
+    });
+
+    console.log("\n✨ Database seeded successfully!");
+    process.exit(0);
+  } catch (error) {
+    console.error("❌ Error seeding database:", error);
+    process.exit(1);
+  }
+};
+
+seedDatabase();

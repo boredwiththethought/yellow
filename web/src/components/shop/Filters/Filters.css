@@ -1,0 +1,365 @@
+:root {
+  --filter-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --filter-shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.1);
+  --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.filters-container {
+  width: 300px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--filter-shadow);
+  transition: box-shadow 0.3s var(--transition-smooth);
+  position: sticky;
+  top: 20px;
+}
+
+.filters-container:hover {
+  box-shadow: var(--filter-shadow-hover);
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.filters-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #484848;
+  font-family: "Poppins", sans-serif;
+}
+
+.filters-reset {
+  font-size: 14px;
+  color: #8a8a8a;
+  font-family: "Poppins", sans-serif;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s var(--transition-smooth);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.filters-reset:hover {
+  color: #484848;
+  background: #f5f5f5;
+  transform: translateX(-2px);
+}
+
+.filter-section {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.filter-section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s var(--transition-smooth);
+}
+
+.filter-section-header:hover {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.filter-section-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #484848;
+  font-family: "Poppins", sans-serif;
+}
+
+.filter-chevron {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s var(--transition-bounce);
+}
+
+.filter-chevron.open {
+  transform: rotate(180deg);
+}
+
+.filter-content {
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.4s var(--transition-smooth),
+    opacity 0.3s var(--transition-smooth),
+    margin-top 0.3s var(--transition-smooth);
+  opacity: 0;
+}
+
+.filter-content.open {
+  max-height: 500px;
+  opacity: 1;
+  margin-top: 12px;
+}
+
+/* Checkbox items */
+.filter-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.filter-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: all 0.2s var(--transition-smooth);
+}
+
+.filter-checkbox-item:hover {
+  background: #f9fafb;
+  transform: translateX(4px);
+}
+
+.filter-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 2px solid #d1d5db;
+  transition: all 0.2s var(--transition-smooth);
+  accent-color: #000;
+}
+
+.filter-checkbox:checked {
+  transform: scale(1.1);
+}
+
+.filter-checkbox:hover {
+  border-color: #000;
+}
+
+.filter-checkbox-label {
+  font-size: 14px;
+  color: #484848;
+  font-family: "Poppins", sans-serif;
+  user-select: none;
+  transition: color 0.2s var(--transition-smooth);
+}
+
+.filter-checkbox-item:hover .filter-checkbox-label {
+  color: #000;
+  font-weight: 500;
+}
+
+/* Color swatches */
+.filter-color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-color-swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-bounce);
+  position: relative;
+}
+
+.filter-color-swatch:hover {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.filter-color-swatch.checked {
+  border-color: #000;
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.filter-color-swatch::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.2s var(--transition-bounce);
+}
+
+.filter-color-swatch.checked::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Tags */
+.filter-tags-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-tag {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-bounce);
+  background: #f5f5f5;
+  color: #8a8a8a;
+}
+
+.filter-tag:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-tag.checked {
+  background: #000;
+  color: #fff;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading state */
+.filters-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.filters-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f4f6;
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Slide in animation */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.filters-container {
+  animation: slideInLeft 0.4s var(--transition-smooth);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .filters-container {
+    width: 100%;
+    position: relative;
+    top: 0;
+  }
+}
+
+/* Active filter indicator */
+.filter-section.has-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: #000;
+  border-radius: 0 4px 4px 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Price range slider styles */
+.filter-price-slider {
+  padding: 12px 0;
+}
+
+.filter-price-values {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 14px;
+  color: #6b7280;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input[type="checkbox"],
+.filter-color-swatch,
+.filter-tag {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Custom scrollbar for filter sections */
+.filter-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter-content::-webkit-scrollbar-track {
+  background: #f9fafb;
+  border-radius: 3px;
+}
+
+.filter-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.filter-content::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

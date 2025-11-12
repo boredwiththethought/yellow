@@ -5,7 +5,7 @@ import type { ThankYouProps } from "./types";
 const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) => {
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      {/* Main Content */}
+
       <div className="flex flex-1 items-center justify-center px-4 py-20">
         <div className="w-full max-w-3xl text-center">
           <h1
@@ -15,7 +15,7 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
             Thank You
           </h1>
 
-          {/* Description */}
+
           <div className="space-y-3">
             <p className="font-poppins text-center text-lg text-[30.82px] leading-[100%] font-medium tracking-[0] text-gray-400 md:text-xl">
               If you liked this project, then give it a <span className="inline-block text-2xl">👍</span>
@@ -26,7 +26,7 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
             </p>
           </div>
 
-          {/* Optional: Order Info если передали */}
+  
           {orderNumber && (
             <div className="mt-10 inline-block rounded-lg bg-gray-50 p-6">
               <p className="mb-1 text-sm text-gray-600">Order Number</p>
@@ -35,7 +35,7 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
             </div>
           )}
 
-          {/* Back to Home Button */}
+
           <div className="mt-12">
             <Link
               to="/"
@@ -47,11 +47,11 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
         </div>
       </div>
 
-      {/* Promo Banner */}
+
       <div className="bg-gray-800 py-8 md:py-10">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            {/* Left Side */}
+
             <div className="flex flex-col items-center gap-3 text-center md:flex-row md:text-left">
               <span className="text-base font-medium text-white md:text-lg">
                 Get More Premium & High Quality Designs For
@@ -63,7 +63,7 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
               </div>
             </div>
 
-            {/* Right Side */}
+    
             <div className="flex items-center gap-3">
               <img src="../../../public/images/thankyou/to-right.png" className="text-2xl md:text-3xl" />
               <div className="text-center">

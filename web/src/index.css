@@ -92,6 +92,6 @@
 }
 
 .sale-stroke {
-  -webkit-text-stroke: 1px #484848; /* толщина и цвет */
-  color: transparent;               /* убрать заливку */
+  -webkit-text-stroke: 1px #484848; 
+  color: transparent;             
 }

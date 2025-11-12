@@ -53,7 +53,9 @@ export const Navbar = () => {
   return (
     <nav className="hidden items-center gap-8 md:flex">
       {navItems.map((item, index) => {
-        const isActive = item.href !== "#" && location.pathname === item.href;
+        const isActive =
+          item.href !== "#" &&
+          (location.pathname === item.href || (item.href === "/products" && location.pathname.startsWith("/product/")));
         return (
           <div key={index}>
             {item.subMenu ? (

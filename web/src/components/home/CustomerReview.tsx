@@ -38,11 +38,11 @@ const CustomerReview = () => {
     }
   ]);
 
-  // Carousel state
+
   const [centerIdx, setCenterIdx] = useState(0);
   const total = reviews.length;
 
-  // Get indices for left, center, right
+
   const getIndices = () => {
     const left = (centerIdx - 1 + total) % total;
     const right = (centerIdx + 1) % total;
@@ -61,7 +61,7 @@ const CustomerReview = () => {
   return (
     <div className="mt-20 w-full bg-[#FAFAFA] md:mt-[150px] mb-[150px]">
       <div className="container mx-auto flex flex-col items-center gap-10 px-4 md:gap-[70px]">
-        {/* Header Section */}
+   
         <div className="flex flex-col items-center gap-3 pt-[60px] md:gap-5 md:pt-[100px]">
           <h1
             style={{ fontFamily: "Volkhov" }}
@@ -77,7 +77,7 @@ const CustomerReview = () => {
           </p>
         </div>
 
-        {/* Carousel Section */}
+       
         <div className="relative flex w-full flex-col items-center pb-[60px] md:pb-[100px]">
           <div
             className="review-carousel-wrapper relative flex w-full justify-center"
@@ -151,9 +151,9 @@ const CustomerReview = () => {
                     className="flex flex-row items-center gap-[83px] rounded-lg bg-white shadow-lg"
                     style={style}
                   >
-                    {/* Image with background square */}
+               
                     <div className="relative shrink-0">
-                      {/* Gray background square */}
+                 
                       <div
                         className="absolute bg-[#D9D9D9]"
                         style={{
@@ -164,7 +164,7 @@ const CustomerReview = () => {
                           zIndex: 0
                         }}
                       />
-                      {/* Actual image */}
+                   
                       <img
                         src={`/images/home/review/r-${review.id}.png`}
                         alt={review.personName}
@@ -215,7 +215,7 @@ const CustomerReview = () => {
             </div>
           </div>
 
-          {/* Navigation Buttons */}
+     
           <div className="mt-8 flex flex-row justify-center gap-6 md:gap-8">
             <button
               aria-label="Previous review"

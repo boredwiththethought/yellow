@@ -1,5 +1,5 @@
 import React from "react";
-import { href, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { label: "Support Center", href: "/support" },
@@ -10,7 +10,7 @@ const navLinks = [
   { label: "FAQ,s", href: "/faqs" }
 ];
 const logoLink = { label: "FASCO", href: "/" };
-// footer navigate nav links for home page
+
 export const FooterNavbarHome: React.FC = () => {
   return (
     <div className="container mx-auto flex flex-col gap-[50px]">

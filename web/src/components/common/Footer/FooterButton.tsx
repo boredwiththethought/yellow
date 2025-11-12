@@ -1,4 +1,3 @@
-// nado sdelat footer button raboshim i animasiu dobavit
 import React from "react";
 
 interface FooterButtonProps {

@@ -54,7 +54,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ subtotal = 100.0, shipping = 
           </span>
           <span
             style={{ fontFamily: "Volkhov" }}
-            className="text-center align-middle text-[22px] leading-[32px] font-normal tracking-[0px] capitalize"
+            className="text-center align-middle text-[22px] leading-8 font-normal tracking-[0px] capitalize"
           >
             ${total}
           </span>

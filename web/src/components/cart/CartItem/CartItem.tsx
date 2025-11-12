@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Minus, Plus, ChevronRight } from "lucide-react";
-import type { CartItem } from "../../../types/cart.types";
 import type { CartItemProps } from "./types";
 
 const CartItem: React.FC<CartItemProps> = ({ id, name, price, color, quantity, onRemove, onUpdateQuantity }) => {

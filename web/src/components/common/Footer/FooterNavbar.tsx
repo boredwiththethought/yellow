@@ -7,7 +7,7 @@ const navLinks = [
   { label: "Products", href: "/products" },
   { label: "Pages", href: "/pages" }
 ];
-// footer navigate nav links
+
 export const FooterNavbar: React.FC = () => {
   return (
     <div className="container mx-auto flex flex-col gap-[50px]">

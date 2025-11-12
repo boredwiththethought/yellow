@@ -8,7 +8,7 @@ This workspace contains:
 ## Setup
 
 1. Install dependencies for all packages
-2. Create `server/.env` from `server/.env.example`
+2. Seed the database
 3. Start both apps in dev mode
 
 ## Development

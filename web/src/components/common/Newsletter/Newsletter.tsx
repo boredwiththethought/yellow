@@ -38,7 +38,7 @@ const Newsletter: React.FC = () => {
     <section className="bg-gray-50 py-16">
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-3">
-          {/* Left Image */}
+
           <div className="hidden md:block">
             <img
               src="/images/newsletter/model-1.png"
@@ -50,7 +50,7 @@ const Newsletter: React.FC = () => {
             />
           </div>
 
-          {/* Center Content */}
+
           <div className="text-center">
             <h2 className="mb-4 text-3xl font-bold text-black">Subscribe To Our Newsletter</h2>
             <p className="mx-auto mb-8 max-w-md text-gray-600">
@@ -58,7 +58,7 @@ const Newsletter: React.FC = () => {
               sem. Scelerisque duis ultrices sollicitudin
             </p>
 
-            {/* Newsletter Form */}
+  
             <form onSubmit={handleSubmit} className="mx-auto max-w-md">
               <div className="flex gap-2">
                 <input

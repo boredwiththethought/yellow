@@ -1,539 +1,307 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "./NewArrivals.css";
 
-export interface gridItems {
+export interface GridItem {
   id: number;
   name: string;
   subName: string;
   review: string;
   rating?: number;
-  subReview?: string;
   price: string;
   soldOut?: boolean;
 }
 
-const categoryData: Record<string, gridItems[]> = {
+const categoryData: Record<string, GridItem[]> = {
+  gridMensFashion: [
+    { id: 1, name: "Casual Shirt", subName: "Levis", rating: 4.5, review: "(3.2k) Customer Reviews", price: "$85.00" },
+    {
+      id: 2,
+      name: "Denim Jacket",
+      subName: "Wrangler",
+      rating: 5,
+      review: "(5.1k) Customer Reviews",
+      price: "$125.00"
+    },
+    { id: 3, name: "Wool Sweater", subName: "H&M", rating: 4, review: "(2.8k) Customer Reviews", price: "$75.50" },
+    { id: 4, name: "Corduroy Shirt", subName: "Gap", rating: 4.2, review: "(1.1k) Customer Reviews", price: "$69.00" },
+    { id: 5, name: "Casual Chinos", subName: "Uniqlo", rating: 4.4, review: "(900) Customer Reviews", price: "$49.00" },
+    {
+      id: 6,
+      name: "Lightweight Hoodie",
+      subName: "Nike",
+      rating: 4.6,
+      review: "(2.3k) Customer Reviews",
+      price: "$79.00"
+    }
+  ],
   gridWomensFashion: [
+    { id: 1, name: "Shiny Dress", subName: "Al Karam", rating: 5, review: "(4.1k) Customer Reviews", price: "$95.50" },
+    { id: 2, name: "Long Dress", subName: "Al Karam", rating: 5, review: "(4.1k) Customer Reviews", price: "$95.50" },
+    { id: 3, name: "Full Sweater", subName: "Al Karam", rating: 5, review: "(4.1k) Customer Reviews", price: "$95.50" },
+    { id: 4, name: "Floral Midi", subName: "Zara", rating: 4.5, review: "(1.9k) Customer Reviews", price: "$79.00" },
+    { id: 5, name: "Silk Blouse", subName: "COS", rating: 4.7, review: "(2.2k) Customer Reviews", price: "$68.00" },
+    { id: 6, name: "Pleated Skirt", subName: "Mango", rating: 4.3, review: "(1.4k) Customer Reviews", price: "$59.00" }
+  ],
+  gridWomenAccessories: [
     {
       id: 1,
-      name: "Shiny Dress",
-      subName: "Al Karam",
+      name: "Leather Handbag",
+      subName: "Michael Kors",
       rating: 5,
-      review: "(4.1k) Customer Reviews",
-      price: "$95.50",
-      soldOut: false
+      review: "(5.3k) Customer Reviews",
+      price: "$145.00"
     },
     {
       id: 2,
-      name: "Long Dress",
-      subName: "Al Karam",
-      rating: 5,
-      review: "(4.1k) Customer Reviews",
-      price: "$95.50",
-      soldOut: false
+      name: "Gold Necklace",
+      subName: "Pandora",
+      rating: 4.5,
+      review: "(2.9k) Customer Reviews",
+      price: "$89.00"
     },
-    {
-      id: 3,
-      name: "Full Sweater",
-      subName: "Al Karam",
-      rating: 5,
-      review: "(4.1k) Customer Reviews",
-      price: "$95.50",
-      soldOut: false
-    },
-
+    { id: 3, name: "Silk Scarf", subName: "Hermès", rating: 5, review: "(3.7k) Customer Reviews", price: "$120.00" },
     {
       id: 4,
-      name: "White Dress",
-      subName: "Al Karam",
-      rating: 5,
-      review: "(4.1k) Customer Reviews",
-      price: "$95.50",
-      soldOut: false
+      name: "Aviator Sunglasses",
+      subName: "Ray-Ban",
+      rating: 4.4,
+      review: "(1.2k) Customer Reviews",
+      price: "$129.00"
     },
     {
       id: 5,
-      name: "Colorful Dress",
-      subName: "Al Karam",
-      rating: 5,
-      review: "(4.1k) Customer Reviews",
-      price: "$95.50",
-      soldOut: false
+      name: "Beaded Bracelet",
+      subName: "Tiffany",
+      rating: 4.2,
+      review: "(900) Customer Reviews",
+      price: "$49.00"
     },
     {
       id: 6,
-      name: "White Shirt",
-      subName: "Al Karam",
-      rating: 5,
-      review: "(4.1k) Customer Reviews",
-      price: "$95.50",
-      soldOut: false
+      name: "Evening Clutch",
+      subName: "Kate Spade",
+      rating: 4.6,
+      review: "(1.7k) Customer Reviews",
+      price: "$99.00"
+    }
+  ],
+  gridMensAccessories: [
+    { id: 1, name: "Leather Belt", subName: "Gucci", rating: 5, review: "(4.5k) Customer Reviews", price: "$125.00" },
+    { id: 2, name: "Classic Watch", subName: "Rolex", rating: 5, review: "(7.2k) Customer Reviews", price: "$350.00" },
+    {
+      id: 3,
+      name: "Leather Wallet",
+      subName: "Louis Vuitton",
+      rating: 4.5,
+      review: "(5.1k) Customer Reviews",
+      price: "$95.00"
+    },
+    {
+      id: 4,
+      name: "Cufflinks Set",
+      subName: "Tiffany",
+      rating: 4.3,
+      review: "(800) Customer Reviews",
+      price: "$69.00"
+    },
+    { id: 5, name: "Sunglasses", subName: "Persol", rating: 4.6, review: "(1.3k) Customer Reviews", price: "$149.00" },
+    { id: 6, name: "Pocket Square", subName: "Hermès", rating: 4.1, review: "(460) Customer Reviews", price: "$39.00" }
+  ],
+  gridDiscountDeals: [
+    { id: 1, name: "Summer Dress", subName: "Zara", rating: 4.5, review: "(3.8k) Customer Reviews", price: "$45.00" },
+    { id: 2, name: "Cotton T-Shirt", subName: "H&M", rating: 4, review: "(5.5k) Customer Reviews", price: "$25.00" },
+    { id: 3, name: "Denim Jeans", subName: "Levis", rating: 5, review: "(6.7k) Customer Reviews", price: "$55.00" },
+    { id: 4, name: "Sneaker Sale", subName: "Adidas", rating: 4.6, review: "(2.1k) Customer Reviews", price: "$69.00" },
+    { id: 5, name: "Graphic Tee", subName: "Uniqlo", rating: 4.2, review: "(1.9k) Customer Reviews", price: "$19.00" },
+    {
+      id: 6,
+      name: "Shorts Clearance",
+      subName: "Forever21",
+      rating: 4.0,
+      review: "(700) Customer Reviews",
+      price: "$15.00"
     }
   ]
 };
 
-const StarRating = ({ rating }: { rating: number }) => {
-  return (
-    <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map(star => (
-        <svg
-          key={star}
-          className="h-4 w-4"
-          fill={star <= Math.floor(rating) ? "#FFC107" : star - 0.5 <= rating ? "url(#half)" : "#E0E0E0"}
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="half">
-              <stop offset="50%" stopColor="#FFC107" />
-              <stop offset="50%" stopColor="#E0E0E0" />
-            </linearGradient>
-          </defs>
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-        </svg>
-      ))}
-    </div>
-  );
+const imageSets: Record<string, string[]> = {
+  gridMensFashion: [
+    "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=800&q=60", // Casual Shirt
+    "https://images.unsplash.com/photo-1551028719-2ca1b8e4e5f2?auto=format&fit=crop&w=800&q=60", // Denim Jacket
+    "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=60", // Wool Sweater
+    "https://images.unsplash.com/photo-1602810319428-019690571b5b?auto=format&fit=crop&w=800&q=60", // Corduroy Shirt
+    "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=800&q=60", // Casual Chinos
+    "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=60" // Lightweight Hoodie
+  ],
+  gridWomensFashion: [
+    "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=60", // Shiny Dress
+    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=800&q=60", // Long Dress
+    "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=800&q=60", // Full Sweater
+    "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=800&q=60", // Floral Midi
+    "https://images.unsplash.com/photo-1564257577149-47f1cc08c6d6?auto=format&fit=crop&w=800&q=60", // Silk Blouse
+    "https://images.unsplash.com/photo-1583846832232-c120d3023e1c?auto=format&fit=crop&w=800&q=60" // Pleated Skirt
+  ],
+  gridWomenAccessories: [
+    "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=800&q=60", // Leather Handbag
+    "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=60", // Gold Necklace
+    "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?auto=format&fit=crop&w=800&q=60", // Silk Scarf
+    "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=60", // Aviator Sunglasses
+    "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=60", // Beaded Bracelet
+    "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&w=800&q=60" // Evening Clutch
+  ],
+  gridMensAccessories: [
+    "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=800&q=60", // Leather Belt
+    "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=60", // Classic Watch
+    "https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=800&q=60", // Leather Wallet
+    "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=60", // Cufflinks Set
+    "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=800&q=60", // Sunglasses
+    "https://images.unsplash.com/photo-1621186403033-8cffaef1e104?auto=format&fit=crop&w=800&q=60" // Pocket Square
+  ],
+  gridDiscountDeals: [
+    "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=800&q=60", // Summer Dress
+    "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=60", // Cotton T-Shirt
+    "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=800&q=60", // Denim Jeans
+    "https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=800&q=60", // Sneaker Sale
+    "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=800&q=60", // Graphic Tee
+    "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=800&q=60" // Shorts Clearance
+  ]
 };
+
+const FALLBACK = "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=60";
 
 export default function NewArrivals() {
   const navigate = useNavigate();
-  const [activeIndex, setActiveIndex] = React.useState<
-    | "gridMensFashion"
-    | "gridWomensFashion"
-    | "gridWomenAccessories"
-    | "gridMensAccessories"
-    | "gridDiscountDeals"
-    | null
-  >(() => "gridWomensFashion");
-  const btnRefs = {
-    gridMensFashion: React.useRef<HTMLButtonElement>(null),
-    gridWomensFashion: React.useRef<HTMLButtonElement>(null),
-    gridWomenAccessories: React.useRef<HTMLButtonElement>(null),
-    gridMensAccessories: React.useRef<HTMLButtonElement>(null),
-    gridDiscountDeals: React.useRef<HTMLButtonElement>(null)
-  };
-  const handleCategoryClick = (key: Exclude<typeof activeIndex, null>) => {
-    setActiveIndex(key);
-    btnRefs[key]?.current?.focus();
-  };
-  React.useEffect(() => {
-    if (activeIndex && btnRefs[activeIndex]?.current) {
-      btnRefs[activeIndex].current.focus();
-    }
-  }, [activeIndex]);
+  const [active, setActive] = React.useState<string>("gridMensFashion");
 
-  const currentItems = activeIndex ? categoryData[activeIndex] : [];
+  const handleCategory = (key: string) => setActive(key);
+
+  const items = categoryData[active] || [];
+
   return (
-    <div className="container mx-auto flex flex-col items-center gap-[50px] bg-white px-4 pt-[150px]">
-      <div className="flex flex-col items-center gap-5 text-center">
-        <h2
-          className="text-center text-[46px] leading-[100%] font-normal tracking-[0px] text-[#484848]"
-          style={{ fontFamily: "Volkhov" }}
+    <section style={{ maxWidth: 1200, margin: "0 auto", padding: "48px 12px" }}>
+      <header style={{ textAlign: "center", marginBottom: 24 }}>
+        <h2 style={{ fontSize: 36, color: "#484848", fontFamily: "Volkhov" }}>New Arrivals</h2>
+        <p style={{ color: "#8A8A8A", fontFamily: "Poppins" }}>Hand-picked trending items — updated weekly for you.</p>
+      </header>
+
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 20, flexWrap: "wrap" }}>
+        <button
+          onClick={() => handleCategory("gridMensFashion")}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 999,
+            background: active === "gridMensFashion" ? "#000" : "#FAFAFA",
+            color: active === "gridMensFashion" ? "#fff" : "#8A8A8A"
+          }}
         >
-          New Arrivals
-        </h2>
-        <p
-          style={{ fontFamily: "Poppins" }}
-          className="text-center text-[16px] leading-[26px] font-normal tracking-[0px] text-[#8A8A8A]"
+          Men's Fashion
+        </button>
+        <button
+          onClick={() => handleCategory("gridWomensFashion")}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 999,
+            background: active === "gridWomensFashion" ? "#000" : "#FAFAFA",
+            color: active === "gridWomensFashion" ? "#fff" : "#8A8A8A"
+          }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scelerisque duis <br /> ultrices sollicitudin aliquam
-          sem. Scelerisque duis ultrices sollicitudin{" "}
-        </p>
+          Women's Fashion
+        </button>
+        <button
+          onClick={() => handleCategory("gridWomenAccessories")}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 999,
+            background: active === "gridWomenAccessories" ? "#000" : "#FAFAFA",
+            color: active === "gridWomenAccessories" ? "#fff" : "#8A8A8A"
+          }}
+        >
+          Women's Accessories
+        </button>
+        <button
+          onClick={() => handleCategory("gridMensAccessories")}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 999,
+            background: active === "gridMensAccessories" ? "#000" : "#FAFAFA",
+            color: active === "gridMensAccessories" ? "#fff" : "#8A8A8A"
+          }}
+        >
+          Men's Accessories
+        </button>
+        <button
+          onClick={() => handleCategory("gridDiscountDeals")}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 999,
+            background: active === "gridDiscountDeals" ? "#000" : "#FAFAFA",
+            color: active === "gridDiscountDeals" ? "#fff" : "#8A8A8A"
+          }}
+        >
+          Discount Deals
+        </button>
       </div>
-      <div className="flex flex-col items-center gap-[50px]">
-        <div className="flex flex-col items-center gap-[50px]">
-          <div className="flex items-center gap-[30px]">
-            <button
-              ref={btnRefs.gridMensFashion}
-              tabIndex={0}
-              onClick={() => handleCategoryClick("gridMensFashion")}
-              style={{ fontFamily: "Poppins" }}
-              className={`cursor-pointer rounded-[10px] px-[50px] py-5 text-center text-[16px] leading-[100%] font-normal tracking-[0px] ${
-                activeIndex === "gridMensFashion"
-                  ? "bg-black text-white"
-                  : "bg-[#FAFAFA] text-[#8A8A8A] hover:bg-gray-100 hover:text-black"
-              } `}
-            >
-              Men's Fashion
-            </button>
-            <button
-              ref={btnRefs.gridWomensFashion}
-              tabIndex={0}
-              onClick={() => handleCategoryClick("gridWomensFashion")}
-              style={{ fontFamily: "Poppins" }}
-              className={`cursor-pointer rounded-[10px] px-[50px] py-5 text-center text-[16px] leading-[100%] font-normal tracking-[0px] ${
-                activeIndex === "gridWomensFashion"
-                  ? "bg-black text-white"
-                  : "bg-[#FAFAFA] text-[#8A8A8A] hover:bg-gray-100 hover:text-black"
-              } `}
-            >
-              Women's Fashion
-            </button>
-            <button
-              ref={btnRefs.gridWomenAccessories}
-              tabIndex={0}
-              onClick={() => handleCategoryClick("gridWomenAccessories")}
-              style={{ fontFamily: "Poppins" }}
-              className={`cursor-pointer rounded-[10px] px-[50px] py-5 text-center text-[16px] leading-[100%] font-normal tracking-[0px] ${
-                activeIndex === "gridWomenAccessories"
-                  ? "bg-black text-white"
-                  : "bg-[#FAFAFA] text-[#8A8A8A] hover:bg-gray-100 hover:text-black"
-              } `}
-            >
-              Women's Accessories
-            </button>
-            <button
-              ref={btnRefs.gridMensAccessories}
-              tabIndex={0}
-              onClick={() => handleCategoryClick("gridMensAccessories")}
-              style={{ fontFamily: "Poppins" }}
-              className={`cursor-pointer rounded-[10px] px-[50px] py-5 text-center text-[16px] leading-[100%] font-normal tracking-[0px] ${
-                activeIndex === "gridMensAccessories"
-                  ? "bg-black text-white"
-                  : "bg-[#FAFAFA] text-[#8A8A8A] hover:bg-gray-100 hover:text-black"
-              } `}
-            >
-              Men's Accessories
-            </button>
-            <button
-              ref={btnRefs.gridDiscountDeals}
-              tabIndex={0}
-              onClick={() => handleCategoryClick("gridDiscountDeals")}
-              style={{ fontFamily: "Poppins" }}
-              className={`cursor-pointer rounded-[10px] px-[50px] py-5 text-center text-[16px] leading-[100%] font-normal tracking-[0px] ${
-                activeIndex === "gridDiscountDeals"
-                  ? "bg-black text-white"
-                  : "bg-[#FAFAFA] text-[#8A8A8A] hover:bg-gray-100 hover:text-black"
-              } `}
-            >
-              Discount Deals
-            </button>
-          </div>
-        </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+        {items.map((it, i) => {
+        
+          const set = imageSets[active];
+          const src = set && set.length > 0 ? set[i % set.length] : FALLBACK;
+          return (
+            <article key={it.id} onClick={() => navigate("/shop?collection=new-arrivals")} className="na-card">
+              <div className="na-img-wrapper" style={{ position: "relative" }}>
+                <img
+                  src={src}
+                  onError={e => ((e.currentTarget as HTMLImageElement).src = FALLBACK)}
+                  alt={it.name}
+                  className="na-img"
+                  style={{ width: "100%", height: 300, objectFit: "cover" }}
+                />
+                <div
+                  className="na-badge"
+                  style={{
+                    position: "absolute",
+                    left: 8,
+                    top: 8,
+                    background: "rgba(255,255,255,0.9)",
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    fontSize: 12
+                  }}
+                >
+                  {it.subName}
+                </div>
+              </div>
+              <div style={{ padding: 12 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ fontSize: 16, fontWeight: 600 }}>{it.name}</div>
+                  <div style={{ color: "#666" }}>{it.rating?.toFixed(1) ?? "0.0"}</div>
+                </div>
+                <div style={{ marginTop: 8, color: "#7A7A7A", fontSize: 13 }}>{it.review}</div>
+                <div style={{ marginTop: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ fontSize: 18, fontWeight: 700 }}>{it.price}</div>
+                  {it.soldOut !== undefined && (
+                    <div style={{ color: it.soldOut === false ? "#D97706" : "#059669" }}>
+                      {it.soldOut === false ? "Almost Sold Out" : "In Stock"}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
-      {activeIndex === "gridMensFashion" && (
-        <div>
-          <h1>Men's Fashion</h1>
-        </div>
-      )}
-      {activeIndex === "gridWomensFashion" && (
-        <div className="grid grid-cols-3 grid-rows-2 gap-[60px]">
-          {currentItems
-            .filter(item => item.id === 1)
-            .map(item => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-5 rounded-[10px] bg-white px-[25px] pt-[15px] pb-[35px] shadow-2xl"
-              >
-                <img src="../../../public/images/home/arrivals/grid-1.png" alt={`grid-women-fashion-${item.id}`} />
-                <div className="flex flex-col items-start gap-6">
-                  <div className="flex w-full flex-1 items-start justify-between">
-                    <div className="flex flex-col items-start gap-0.5">
-                      <h4
-                        className="text-[20px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.name}
-                      </h4>
-                      <p
-                        className="text-[12px] leading-3 font-medium tracking-[0px] text-[#8A8A8A]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.subName}
-                      </p>
-                    </div>
-                    <StarRating rating={item.rating ?? 0} />
-                  </div>
-                  <p
-                    style={{ fontFamily: "Poppins" }}
-                    className="text-[12px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                  >
-                    {item.review}
-                  </p>
-                  <div className="flex w-full items-center justify-between">
-                    <span
-                      style={{ fontFamily: "Poppins" }}
-                      className="text-[24px] leading-5 font-medium tracking-[-0.01em] text-[#484848]"
-                    >
-                      {item.price}
-                    </span>
-                    {item.soldOut !== undefined && (
-                      <span
-                        className="text-right text-[12px] leading-5 font-normal tracking-[-0.01em] text-[#FF4646]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.soldOut === false ? "Almost Sold Out" : "In Stock"}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          {currentItems
-            .filter(item => item.id === 2)
-            .map(item => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-5 rounded-[10px] bg-white px-[25px] pt-[15px] pb-[35px] shadow-2xl"
-              >
-                <img src="../../../public/images/home/arrivals/grid-2.png" alt={`grid-women-fashion-${item.id}`} />
-                <div className="flex flex-col items-start gap-6">
-                  <div className="flex w-full flex-1 items-start justify-between">
-                    <div className="flex flex-col items-start gap-0.5">
-                      <h4
-                        className="text-[20px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.name}
-                      </h4>
-                      <p
-                        className="text-[12px] leading-3 font-medium tracking-[0px] text-[#8A8A8A]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.subName}
-                      </p>
-                    </div>
-                    <StarRating rating={item.rating ?? 0} />
-                  </div>
-                  <p
-                    style={{ fontFamily: "Poppins" }}
-                    className="text-[12px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                  >
-                    {item.review}
-                  </p>
-                  <div className="flex w-full items-center justify-between">
-                    <span
-                      style={{ fontFamily: "Poppins" }}
-                      className="text-[24px] leading-5 font-medium tracking-[-0.01em] text-[#484848]"
-                    >
-                      {item.price}
-                    </span>
-                    {item.soldOut !== undefined && (
-                      <span
-                        className="text-right text-[12px] leading-5 font-normal tracking-[-0.01em] text-[#FF4646]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.soldOut === false ? "Almost Sold Out" : "In Stock"}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          {currentItems
-            .filter(item => item.id === 3)
-            .map(item => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-5 rounded-[10px] bg-white px-[25px] pt-[15px] pb-[35px] shadow-2xl"
-              >
-                <img src="../../../public/images/home/arrivals/grid-3.png" alt={`grid-women-fashion-${item.id}`} />
-                <div className="flex flex-col items-start gap-6">
-                  <div className="flex w-full flex-1 items-start justify-between">
-                    <div className="flex flex-col items-start gap-0.5">
-                      <h4
-                        className="text-[20px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.name}
-                      </h4>
-                      <p
-                        className="text-[12px] leading-3 font-medium tracking-[0px] text-[#8A8A8A]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.subName}
-                      </p>
-                    </div>
-                    <StarRating rating={item.rating ?? 0} />
-                  </div>
-                  <p
-                    style={{ fontFamily: "Poppins" }}
-                    className="text-[12px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                  >
-                    {item.review}
-                  </p>
-                  <div className="flex w-full items-center justify-between">
-                    <span
-                      style={{ fontFamily: "Poppins" }}
-                      className="text-[24px] leading-5 font-medium tracking-[-0.01em] text-[#484848]"
-                    >
-                      {item.price}
-                    </span>
-                    {item.soldOut !== undefined && (
-                      <span
-                        className="text-right text-[12px] leading-5 font-normal tracking-[-0.01em] text-[#FF4646]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.soldOut === false ? "Almost Sold Out" : "In Stock"}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          {currentItems
-            .filter(item => item.id === 4)
-            .map(item => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-5 rounded-[10px] bg-white px-[25px] pt-[15px] pb-[35px] shadow-2xl"
-              >
-                <img src="../../../public/images/home/arrivals/grid-4.png" alt={`grid-women-fashion-${item.id}`} />
-                <div className="flex flex-col items-start gap-6">
-                  <div className="flex w-full flex-1 items-start justify-between">
-                    <div className="flex flex-col items-start gap-0.5">
-                      <h4
-                        className="text-[20px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.name}
-                      </h4>
-                      <p
-                        className="text-[12px] leading-3 font-medium tracking-[0px] text-[#8A8A8A]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.subName}
-                      </p>
-                    </div>
-                    <StarRating rating={item.rating ?? 0} />
-                  </div>
-                  <p
-                    style={{ fontFamily: "Poppins" }}
-                    className="text-[12px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                  >
-                    {item.review}
-                  </p>
-                  <div className="flex w-full items-center justify-between">
-                    <span
-                      style={{ fontFamily: "Poppins" }}
-                      className="text-[24px] leading-5 font-medium tracking-[-0.01em] text-[#484848]"
-                    >
-                      {item.price}
-                    </span>
-                    {item.soldOut !== undefined && (
-                      <span
-                        className="text-right text-[12px] leading-5 font-normal tracking-[-0.01em] text-[#FF4646]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.soldOut === false ? "Almost Sold Out" : "In Stock"}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          {currentItems
-            .filter(item => item.id === 5)
-            .map(item => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-5 rounded-[10px] bg-white px-[25px] pt-[15px] pb-[35px] shadow-2xl"
-              >
-                <img src="../../../public/images/home/arrivals/grid-5.png" alt={`grid-women-fashion-${item.id}`} />
-                <div className="flex flex-col items-start gap-6">
-                  <div className="flex w-full flex-1 items-start justify-between">
-                    <div className="flex flex-col items-start gap-0.5">
-                      <h4
-                        className="text-[20px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.name}
-                      </h4>
-                      <p
-                        className="text-[12px] leading-3 font-medium tracking-[0px] text-[#8A8A8A]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.subName}
-                      </p>
-                    </div>
-                    <StarRating rating={item.rating ?? 0} />
-                  </div>
-                  <p
-                    style={{ fontFamily: "Poppins" }}
-                    className="text-[12px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                  >
-                    {item.review}
-                  </p>
-                  <div className="flex w-full items-center justify-between">
-                    <span
-                      style={{ fontFamily: "Poppins" }}
-                      className="text-[24px] leading-5 font-medium tracking-[-0.01em] text-[#484848]"
-                    >
-                      {item.price}
-                    </span>
-                    {item.soldOut !== undefined && (
-                      <span
-                        className="text-right text-[12px] leading-5 font-normal tracking-[-0.01em] text-[#FF4646]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.soldOut === false ? "Almost Sold Out" : "In Stock"}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          {currentItems
-            .filter(item => item.id === 6)
-            .map(item => (
-              <div
-                key={item.id}
-                className="flex flex-col gap-5 rounded-[10px] bg-white px-[25px] pt-[15px] pb-[35px] shadow-2xl"
-              >
-                <img src="../../../public/images/home/arrivals/grid-6.png" alt={`grid-women-fashion-${item.id}`} />
-                <div className="flex flex-col items-start gap-6">
-                  <div className="flex w-full flex-1 items-start justify-between">
-                    <div className="flex flex-col items-start gap-0.5">
-                      <h4
-                        className="text-[20px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.name}
-                      </h4>
-                      <p
-                        className="text-[12px] leading-3 font-medium tracking-[0px] text-[#8A8A8A]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.subName}
-                      </p>
-                    </div>
-                    <StarRating rating={item.rating ?? 0} />
-                  </div>
-                  <p
-                    style={{ fontFamily: "Poppins" }}
-                    className="text-[12px] leading-[100%] font-medium tracking-[0px] text-[#484848]"
-                  >
-                    {item.review}
-                  </p>
-                  <div className="flex w-full items-center justify-between">
-                    <span
-                      style={{ fontFamily: "Poppins" }}
-                      className="text-[24px] leading-5 font-medium tracking-[-0.01em] text-[#484848]"
-                    >
-                      {item.price}
-                    </span>
-                    {item.soldOut !== undefined && (
-                      <span
-                        className="text-right text-[12px] leading-5 font-normal tracking-[-0.01em] text-[#FF4646]"
-                        style={{ fontFamily: "Poppins" }}
-                      >
-                        {item.soldOut === false ? "Almost Sold Out" : "In Stock"}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-        </div>
-      )}
-      <button
-        className="cursor-pointer rounded-[10px] bg-black px-[62px] py-5 hover:bg-gray-800 focus:bg-gray-800"
-        style={{ fontFamily: "Poppins" }}
-        onClick={() => navigate("/shop")}
-      >
-        <span className="text-center text-[16px] leading-[100%] font-normal tracking-[0px] text-white">View More</span>
-      </button>
-    </div>
+
+      <div style={{ textAlign: "center", marginTop: 24 }}>
+        <button
+          onClick={() => navigate("/shop")}
+          className="na-view-more-btn"
+          style={{ padding: "10px 24px", borderRadius: 8, background: "#000", color: "#fff", cursor: "pointer" }}
+        >
+          View More
+        </button>
+      </div>
+    </section>
   );
 }

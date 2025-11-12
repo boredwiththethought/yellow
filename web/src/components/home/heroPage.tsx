@@ -41,7 +41,7 @@ export const HeroPage: React.FC<HeroPageProps> = ({ title, subtitle, description
                   {subtitle}
                 </h1>
                 <p
-                  className="text-center text-[16px] text-[20px] leading-[100%] font-medium font-normal tracking-[0%] tracking-[0.1em] text-[#484848] uppercase"
+                  className="text-center text-[20px] leading-[100%] font-medium tracking-widest text-[#484848] uppercase"
                   style={{ fontFamily: "Poppins" }}
                 >
                   {description}
