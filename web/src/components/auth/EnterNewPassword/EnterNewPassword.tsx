@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { AuthLayout } from "../AuthLayuot/AuthLayout";
 import { AlertCircle, Eye, EyeOff, Lock } from "lucide-react";
 import toast from "react-hot-toast";
+import api from "../../../api/axios.config";
 
 export const EnterNewPassword: React.FC = () => {
   const navigate = useNavigate();
@@ -47,28 +48,17 @@ export const EnterNewPassword: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          code,
-          newPassword: formData.newPassword
-        })
+      await api.post("/auth/reset-password", {
+        email,
+        code,
+        newPassword: formData.newPassword
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        toast.error(data.message || "Ошибка сброса пароля");
-        return;
-      }
 
       toast.success("Пароль успешно изменен!");
       navigate("/sign-in");
-    } catch (error) {
-      console.error("Reset password error:", error);
-      toast.error("Ошибка соединения с сервером");
+    } catch (error: any) {
+      const data = error?.response?.data;
+      toast.error(data?.message || "Ошибка сброса пароля");
     } finally {
       setIsLoading(false);
     }

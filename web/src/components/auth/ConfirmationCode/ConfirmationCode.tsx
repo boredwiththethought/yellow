@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { AuthLayout } from "../AuthLayuot/AuthLayout";
 import { AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
+import api from "../../../api/axios.config";
 
 export const ConfirmationCode: React.FC = () => {
   const navigate = useNavigate();
@@ -55,25 +56,14 @@ export const ConfirmationCode: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code: codeString })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Неверный код");
-        toast.error(data.message || "Неверный код");
-        return;
-      }
+      await api.post("/auth/verify-code", { email, code: codeString });
 
       toast.success("Код подтвержден!");
       navigate("/enter-new-password", { state: { email, code: codeString } });
-    } catch (error) {
-      console.error("Verification error:", error);
-      toast.error("Ошибка соединения с сервером");
+    } catch (error: any) {
+      const data = error?.response?.data;
+      setError(data?.message || "Неверный код");
+      toast.error(data?.message || "Неверный код");
     } finally {
       setIsLoading(false);
     }
@@ -82,27 +72,16 @@ export const ConfirmationCode: React.FC = () => {
   const handleResend = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success("Новый код отправлен!");
-        if (data.code) {
-          toast.success(`Код: ${data.code}`, { duration: 10000 });
-        }
-        setCode(["", "", "", "", "", ""]);
-        inputRefs.current[0]?.focus();
-      } else {
-        toast.error("Ошибка отправки кода");
+      const { data } = await api.post("/auth/forgot-password", { email });
+      toast.success("Новый код отправлен!");
+      if (data.code) {
+        toast.success(`Код: ${data.code}`, { duration: 10000 });
       }
-    } catch (error) {
-      console.error("Resend error:", error);
-      toast.error("Ошибка соединения с сервером");
+      setCode(["", "", "", "", "", ""]);
+      inputRefs.current[0]?.focus();
+    } catch (error: any) {
+      const data = error?.response?.data;
+      toast.error(data?.message || "Ошибка отправки кода");
     } finally {
       setIsLoading(false);
     }

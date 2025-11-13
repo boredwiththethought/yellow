@@ -4,6 +4,7 @@ import { AuthLayout } from "../AuthLayuot/AuthLayout";
 import { useAuth } from "../../../context/AuthContext";
 import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
+import api from "../../../api/axios.config";
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -52,32 +53,21 @@ export const SignUp: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (data.errors) {
-          const errorMap: Record<string, string> = {};
-          data.errors.forEach((err: { field: string; message: string }) => {
-            errorMap[err.field] = err.message;
-          });
-          setErrors(errorMap);
-        }
-        toast.error(data.message || "Ошибка регистрации");
-        return;
-      }
+      const { data } = await api.post("/auth/register", formData);
 
       toast.success("Регистрация успешна!");
       login(data.token, data.user);
       navigate("/");
-    } catch (error) {
-      console.error("Registration error:", error);
-      toast.error("Ошибка соединения с сервером");
+    } catch (error: any) {
+      const data = error?.response?.data;
+      if (data?.errors) {
+        const errorMap: Record<string, string> = {};
+        data.errors.forEach((err: { field: string; message: string }) => {
+          errorMap[err.field] = err.message;
+        });
+        setErrors(errorMap);
+      }
+      toast.error(data?.message || "Ошибка регистрации");
     } finally {
       setIsLoading(false);
     }

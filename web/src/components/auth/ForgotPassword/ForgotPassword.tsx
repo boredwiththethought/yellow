@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../AuthLayuot/AuthLayout";
 import { AlertCircle, Mail } from "lucide-react";
 import toast from "react-hot-toast";
+import api from "../../../api/axios.config";
 
 export const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();
@@ -24,31 +25,18 @@ export const ForgotPassword: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        toast.error(data.message || "Ошибка отправки кода");
-        return;
-      }
+      const { data } = await api.post("/auth/forgot-password", { email });
 
       toast.success("Код отправлен на ваш email");
-
 
       if (data.code) {
         toast.success(`Код: ${data.code}`, { duration: 10000 });
       }
 
- 
       navigate("/confirmation", { state: { email } });
-    } catch (error) {
-      console.error("Forgot password error:", error);
-      toast.error("Ошибка соединения с сервером");
+    } catch (error: any) {
+      const data = error?.response?.data;
+      toast.error(data?.message || "Ошибка отправки кода");
     } finally {
       setIsLoading(false);
     }
