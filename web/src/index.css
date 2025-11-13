@@ -1,0 +1,97 @@
+@import "tailwindcss"; 
+
+@font-face {
+  font-family: 'Rage Italic';
+  src: url('./assets/fonts/rageitalic/rageitalic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/poppins/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/poppins/Poppins-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/poppins/Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/poppins/Poppins-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/poppins/Poppins-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/poppins/Poppins-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'Volkhov';
+  src: url('./assets/fonts/volkhov/Volkhov-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Volkhov';
+  src: url('./assets/fonts/volkhov/Volkhov-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Volkhov';
+  src: url('./assets/fonts/volkhov/Volkhov-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic; 
+}
+@font-face {
+  font-family: 'Volkhov';
+  src: url('./assets/fonts/volkhov/Volkhov-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic; 
+}
+@font-face {
+  font-family: 'Jost';
+  src: url('./assets/fonts/jost/Jost-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal; 
+}
+@font-face {
+  font-family: 'Jost';
+  src: url('./assets/fonts/jost/Jost-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal; 
+}
+
+@font-face {
+  font-family: 'Digital Numbers';
+  src: url('./assets/fonts/numbers/DigitalNumbers-Regular.ttf') format('truetype');
+}
+
+.sale-stroke {
+  -webkit-text-stroke: 1px #484848; 
+  color: transparent;             
+}

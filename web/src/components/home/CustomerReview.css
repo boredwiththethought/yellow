@@ -1,0 +1,54 @@
+.customer-review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.review {
+  transition: transform 0.5s ease;
+  opacity: 0.5;
+}
+
+.central-review {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.side-review {
+  transform: scale(0.8);
+}
+
+.animate-central {
+  animation: slideIn 0.5s forwards;
+  transition: transform 0.5s ease;
+}
+
+.animate-side {
+  animation: slideOut 0.5s forwards;
+  transition: transform 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}

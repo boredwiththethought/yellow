@@ -1,0 +1,19 @@
+{
+  "name": "fasco-monorepo",
+  "private": true,
+  "workspaces": [
+    "web",
+    "server"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace web run dev",
+    "dev:server": "npm --workspace server run dev",
+    "dev": "concurrently -n web,server -c blue,magenta \"npm:dev:web\" \"npm:dev:server\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "fasco-monorepo": "."
+  }
+}
