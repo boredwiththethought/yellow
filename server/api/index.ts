@@ -440,9 +440,8 @@ app.post("/api/auth/forgot-password", async (req: Request, res: Response) => {
     }
 
     const db = getDb();
-    const user = await db
-      .collection("users")
-      .findOne({ email: email.toLowerCase() });
+    // Check if user exists (for future email sending functionality)
+    await db.collection("users").findOne({ email: email.toLowerCase() });
 
     // Always return success to prevent email enumeration
     res.json({
