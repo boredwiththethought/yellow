@@ -8,7 +8,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "NODE_ENV=production node dist/index.js",
     "seed": "tsx src/seed/seedSimple.ts",
-    "vercel-build": "tsc -p tsconfig.json && rm -rf api && mkdir -p api && cp -r dist/* api/"
+    "vercel-build": "tsc src/api.ts --outDir api --esModuleInterop --allowSyntheticDefaultImports --moduleResolution node --target ES2020 --module ESNext --skipLibCheck && mv api/api.js api/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

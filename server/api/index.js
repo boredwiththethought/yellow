@@ -1,100 +1,72 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import morgan from "morgan";
-import { connectToDatabase, getDb } from "./db.js";
-import { ObjectId } from "mongodb";
-import authRoutes from "./routes/auth.js";
+import { MongoClient, ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { z } from "zod";
 const app = express();
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+// CORS configuration for Vercel
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    process.env.FRONTEND_URL,
+];
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin)
+            return callback(null, true);
+        const isAllowed = allowedOrigins.some((o) => o === origin) ||
+            (origin && origin.endsWith(".vercel.app"));
+        callback(null, isAllowed);
+    },
+    credentials: true,
+}));
 app.use(express.json());
-app.use(morgan("dev"));
-app.use("/api/auth", authRoutes);
+// MongoDB connection
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
+const dbName = process.env.MONGODB_DB || "fascodb";
+let client = null;
+let db = null;
+async function connectToDatabase() {
+    if (db && client)
+        return { client, db };
+    const mongo = new MongoClient(uri);
+    await mongo.connect();
+    client = mongo;
+    db = mongo.db(dbName);
+    return { client, db };
+}
+function getDb() {
+    if (!db)
+        throw new Error("Database not initialized");
+    return db;
+}
+// JWT Configuration
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
+const JWT_EXPIRES_IN = "7d";
+// Validation schemas
+const registerSchema = z.object({
+    email: z.string().email("Invalid email format"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    firstName: z.string().min(2, "First name must be at least 2 characters"),
+    lastName: z.string().min(2, "Last name must be at least 2 characters"),
+});
+const loginSchema = z.object({
+    email: z.string().email("Invalid email format"),
+    password: z.string().min(1, "Password is required"),
+});
+// Health check
 app.get("/api/health", async (_req, res) => {
     try {
         await connectToDatabase();
-        res.json({ status: "ok" });
+        res.json({ status: "ok", timestamp: new Date().toISOString() });
     }
     catch (e) {
         res.status(500).json({ status: "error", error: e.message });
     }
 });
-app.get("/api/items", async (req, res) => {
-    try {
-        await connectToDatabase();
-        const db = getDb();
-        const query = {};
-        const { category, brand, color, priceMin, priceMax } = req.query;
-        if (category)
-            query.category = category;
-        if (brand)
-            query.brand = brand;
-        if (color)
-            query.color = color;
-        if (priceMin || priceMax) {
-            query.price = {};
-            if (priceMin)
-                query.price.$gte = Number(priceMin);
-            if (priceMax)
-                query.price.$lte = Number(priceMax);
-        }
-        const items = await db
-            .collection("fascocollection")
-            .find(query)
-            .limit(100)
-            .toArray();
-        res.json(items);
-    }
-    catch (e) {
-        res.status(500).json({ error: e.message });
-    }
-});
-app.post("/api/items", async (req, res) => {
-    try {
-        await connectToDatabase();
-        const db = getDb();
-        const doc = req.body ?? {};
-        if (typeof doc !== "object" || Array.isArray(doc)) {
-            return res.status(400).json({ error: "Body must be an object" });
-        }
-        const result = await db.collection("fascocollection").insertOne(doc);
-        res.status(201).json({ insertedId: result.insertedId });
-    }
-    catch (e) {
-        res.status(500).json({ error: e.message });
-    }
-});
-app.delete("/api/items/:id", async (req, res) => {
-    try {
-        await connectToDatabase();
-        const db = getDb();
-        const id = req.params.id;
-        if (!ObjectId.isValid(id))
-            return res.status(400).json({ error: "Invalid id" });
-        const result = await db
-            .collection("fascocollection")
-            .deleteOne({ _id: new ObjectId(id) });
-        res.json({ deletedCount: result.deletedCount });
-    }
-    catch (e) {
-        res.status(500).json({ error: e.message });
-    }
-});
-app.get("/api/filters", async (_req, res) => {
-    try {
-        await connectToDatabase();
-        const db = getDb();
-        const categories = await db
-            .collection("fascocollection")
-            .distinct("category");
-        const brands = await db.collection("fascocollection").distinct("brand");
-        const colors = await db.collection("fascocollection").distinct("color");
-        res.json({ categories, brands, colors });
-    }
-    catch (e) {
-        res.status(500).json({ error: e.message });
-    }
-});
+// Get all products with filters
 app.get("/api/products", async (req, res) => {
     try {
         await connectToDatabase();
@@ -185,6 +157,7 @@ app.get("/api/products", async (req, res) => {
         });
     }
 });
+// Get single product
 app.get("/api/products/:id", async (req, res) => {
     try {
         await connectToDatabase();
@@ -213,39 +186,7 @@ app.get("/api/products/:id", async (req, res) => {
         });
     }
 });
-app.post("/api/orders", async (req, res) => {
-    try {
-        await connectToDatabase();
-        const db = getDb();
-        const orderData = req.body;
-        console.log("\n=== NEW ORDER RECEIVED ===");
-        console.log("Customer:", orderData.customer);
-        console.log("Items:", orderData.items);
-        console.log("Payment:", orderData.payment);
-        console.log("Delivery:", orderData.delivery);
-        console.log("Total:", orderData.total);
-        console.log("Created At:", orderData.createdAt);
-        console.log("========================\n");
-        const result = await db.collection("orders").insertOne({
-            ...orderData,
-            status: "pending",
-            createdAt: new Date(orderData.createdAt),
-        });
-        res.status(201).json({
-            success: true,
-            message: "Order created successfully",
-            orderId: result.insertedId,
-        });
-    }
-    catch (e) {
-        console.error("Order creation error:", e);
-        res.status(500).json({
-            success: false,
-            message: "Failed to create order",
-            error: e.message,
-        });
-    }
-});
+// Get filter options
 app.get("/api/products/filters/options", async (_req, res) => {
     try {
         await connectToDatabase();
@@ -284,14 +225,168 @@ app.get("/api/products/filters/options", async (_req, res) => {
         });
     }
 });
-const PORT = Number(process.env.PORT || 5000);
-connectToDatabase()
-    .then(() => {
-    app.listen(PORT, () => {
-        console.log(`API listening on http://localhost:${PORT}`);
-    });
-})
-    .catch((err) => {
-    console.error("Failed to connect to DB:", err);
-    process.exit(1);
+// Create order
+app.post("/api/orders", async (req, res) => {
+    try {
+        await connectToDatabase();
+        const db = getDb();
+        const orderData = req.body;
+        const result = await db.collection("orders").insertOne({
+            ...orderData,
+            status: "pending",
+            createdAt: new Date(orderData.createdAt),
+        });
+        res.status(201).json({
+            success: true,
+            message: "Order created successfully",
+            orderId: result.insertedId,
+        });
+    }
+    catch (e) {
+        console.error("Order creation error:", e);
+        res.status(500).json({
+            success: false,
+            message: "Failed to create order",
+            error: e.message,
+        });
+    }
 });
+// Auth: Register
+app.post("/api/auth/register", async (req, res) => {
+    try {
+        await connectToDatabase();
+        const validation = registerSchema.safeParse(req.body);
+        if (!validation.success) {
+            return res.status(400).json({
+                success: false,
+                message: "Validation error",
+                errors: validation.error.issues.map((i) => ({
+                    field: i.path[0],
+                    message: i.message,
+                })),
+            });
+        }
+        const { email, password, firstName, lastName } = validation.data;
+        const db = getDb();
+        const existingUser = await db
+            .collection("users")
+            .findOne({ email: email.toLowerCase() });
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message: "User with this email already exists",
+            });
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = {
+            email: email.toLowerCase(),
+            password: hashedPassword,
+            firstName,
+            lastName,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            isVerified: true,
+        };
+        const result = await db.collection("users").insertOne(newUser);
+        const token = jwt.sign({ userId: result.insertedId.toString(), email: newUser.email }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+        res.status(201).json({
+            success: true,
+            message: "User registered successfully",
+            token,
+            user: {
+                id: result.insertedId,
+                email: newUser.email,
+                firstName,
+                lastName,
+            },
+        });
+    }
+    catch (e) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: e.message,
+        });
+    }
+});
+// Auth: Login
+app.post("/api/auth/login", async (req, res) => {
+    try {
+        await connectToDatabase();
+        const validation = loginSchema.safeParse(req.body);
+        if (!validation.success) {
+            return res.status(400).json({
+                success: false,
+                message: "Validation error",
+                errors: validation.error.issues.map((i) => ({
+                    field: i.path[0],
+                    message: i.message,
+                })),
+            });
+        }
+        const { email, password } = validation.data;
+        const db = getDb();
+        const user = await db
+            .collection("users")
+            .findOne({ email: email.toLowerCase() });
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password",
+            });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid email or password",
+            });
+        }
+        const token = jwt.sign({ userId: user._id.toString(), email: user.email }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+        res.json({
+            success: true,
+            message: "Login successful",
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+            },
+        });
+    }
+    catch (e) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: e.message,
+        });
+    }
+});
+// Auth: Forgot Password
+app.post("/api/auth/forgot-password", async (req, res) => {
+    try {
+        await connectToDatabase();
+        const { email } = req.body;
+        if (!email || typeof email !== "string") {
+            return res.status(400).json({
+                success: false,
+                message: "Email is required",
+            });
+        }
+        // Always return success to prevent email enumeration
+        res.json({
+            success: true,
+            message: "If this email exists, a reset code has been sent",
+        });
+    }
+    catch (e) {
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: e.message,
+        });
+    }
+});
+// Export for Vercel Serverless
+export default app;
