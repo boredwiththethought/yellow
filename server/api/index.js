@@ -31,13 +31,12 @@ let db = null;
 async function connectToDatabase() {
     if (db && client)
         return { client, db };
-    const mongo = new MongoClient(uri, {
-        tls: true,
-        tlsAllowInvalidCertificates: false,
-    });
+    // For serverless, we need minimal connection options
+    const mongo = new MongoClient(uri);
     await mongo.connect();
     client = mongo;
     db = mongo.db(dbName);
+    console.log("MongoDB connected successfully");
     return { client, db };
 }
 function getDb() {
