@@ -31,8 +31,12 @@ let db = null;
 async function connectToDatabase() {
     if (db && client)
         return { client, db };
-    // For serverless, we need minimal connection options
-    const mongo = new MongoClient(uri);
+    // Serverless-optimized MongoDB connection
+    const mongo = new MongoClient(uri, {
+        maxPoolSize: 10,
+        serverSelectionTimeoutMS: 5000,
+        socketTimeoutMS: 45000,
+    });
     await mongo.connect();
     client = mongo;
     db = mongo.db(dbName);
