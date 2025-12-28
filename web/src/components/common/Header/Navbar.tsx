@@ -12,17 +12,13 @@ const navItems: NavItem[] = [
     href: "/shop"
   },
   {
-    label: "Products",
-    href: "/products"
-  },
-  {
     label: "Pages",
     href: "#",
     subMenu: [
       {
         label: "Shop Page",
         href: "/shop",
-        description: "Browse our products "
+        description: "Browse our collection"
       },
       {
         label: "Product Page",
@@ -55,7 +51,7 @@ export const Navbar = () => {
       {navItems.map((item, index) => {
         const isActive =
           item.href !== "#" &&
-          (location.pathname === item.href || (item.href === "/products" && location.pathname.startsWith("/product/")));
+          (location.pathname === item.href || (item.href === "/shop" && location.pathname.startsWith("/product/")));
         return (
           <div key={index}>
             {item.subMenu ? (

@@ -4,28 +4,27 @@ import { Link } from "react-router-dom";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
-  { label: "Products", href: "/products" },
   { label: "Pages", href: "/pages" }
 ];
 
 export const FooterNavbar: React.FC = () => {
   return (
-    <div className="container mx-auto flex flex-col gap-[50px]">
-      <div className="flex items-center justify-between px-4 py-6">
+    <div className="container mx-auto flex flex-col gap-8 px-4 sm:gap-[50px]">
+      <div className="flex flex-col items-center justify-between gap-6 py-6 sm:flex-row sm:gap-0">
         <Link
           to="/"
-          className="text-[32px] leading-[100%] font-normal tracking-[0px] text-[#484848]"
+          className="text-2xl font-normal tracking-[0px] text-[#484848] sm:text-[32px]"
           style={{ fontFamily: "Volkhov" }}
         >
           FASCO
         </Link>
         <nav>
-          <ul className="flex items-center gap-[70px]">
+          <ul className="flex flex-wrap items-center justify-center gap-6 sm:gap-[70px]">
             {navLinks.map(link => (
               <li key={link.label}>
                 <Link
                   to={link.href}
-                  className="text-[16px] leading-[100%] font-normal tracking-[0px] text-[#484848] hover:underline"
+                  className="text-sm font-normal tracking-[0px] text-[#484848] transition-colors hover:text-black hover:underline sm:text-[16px]"
                   style={{ fontFamily: "Poppins" }}
                 >
                   {link.label}
@@ -36,10 +35,10 @@ export const FooterNavbar: React.FC = () => {
         </nav>
       </div>
       <p
-        className="text-center text-[12px] leading-[26px] font-normal tracking-[0px] text-[#484848]"
+        className="text-center text-[11px] leading-[26px] font-normal tracking-[0px] text-[#484848] sm:text-[12px]"
         style={{ fontFamily: "Poppins" }}
       >
-        Copyright © 2022 FASCO . All Rights Reserved.
+        Copyright © {new Date().getFullYear()} FASCO. All Rights Reserved.
       </p>
     </div>
   );

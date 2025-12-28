@@ -88,7 +88,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
 
   const deadline = useMemo(() => {
     const dt = new Date();
-    dt.setDate(dt.getDate() + 3); 
+    dt.setDate(dt.getDate() + 3);
     return dt.toISOString();
   }, []);
   const t = useCountdown(deadline);
@@ -116,17 +116,24 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
     <>
       <Header />
       <div className="bg-white">
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-6 text-sm text-gray-500" style={{ fontFamily: "Poppins" }}>
+        <div className="container mx-auto px-4 py-4 sm:py-8">
+          {/* Breadcrumb */}
+          <div className="mb-4 text-xs text-gray-500 sm:mb-6 sm:text-sm" style={{ fontFamily: "Poppins" }}>
             <Link to="/shop" className="hover:underline">
               Shop
             </Link>{" "}
-            / <span>{product.name}</span>
+            / <span className="truncate">{product.name}</span>
           </div>
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
-            {/* Gallery */}
-            <div className="grid grid-cols-[80px_1fr] gap-4">
-              <div className="flex flex-col gap-3" role="tablist" aria-label="Product images">
+
+          <div className="grid grid-cols-1 gap-6 sm:gap-10 lg:grid-cols-2">
+            {/* Gallery - Mobile optimized */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-[80px_1fr] sm:gap-4">
+              {/* Thumbnails - horizontal on mobile, vertical on desktop */}
+              <div
+                className="order-2 flex gap-2 overflow-x-auto pb-2 sm:order-1 sm:flex-col sm:gap-3 sm:overflow-visible sm:pb-0"
+                role="tablist"
+                aria-label="Product images"
+              >
                 {product.images.slice(0, 6).map((img, i) => (
                   <button
                     key={img + i}
@@ -134,44 +141,60 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
                     role="tab"
                     aria-selected={i === activeIdx}
                     aria-label={`Image ${i + 1}`}
-                    className={`overflow-hidden rounded-lg border ${i === activeIdx ? "border-black" : "border-gray-200"}`}
+                    className={`shrink-0 overflow-hidden rounded-lg border transition-all ${i === activeIdx ? "border-black ring-2 ring-black/20" : "border-gray-200"}`}
                   >
-                    <img src={img} alt={`${product.name} ${i + 1}`} className="h-20 w-20 object-cover" />
+                    <img
+                      src={img}
+                      alt={`${product.name} ${i + 1}`}
+                      className="h-16 w-16 object-cover sm:h-20 sm:w-20"
+                    />
                   </button>
                 ))}
               </div>
-              <SwipeImage
-                src={product.images[activeIdx]}
-                alt={product.name}
-                count={product.images.length}
-                index={activeIdx}
-                onPrev={() => setActiveIdx(i => (i - 1 + product.images.length) % product.images.length)}
-                onNext={() => setActiveIdx(i => (i + 1) % product.images.length)}
-              />
+              {/* Main image */}
+              <div className="order-1 sm:order-2">
+                <SwipeImage
+                  src={product.images[activeIdx]}
+                  alt={product.name}
+                  count={product.images.length}
+                  index={activeIdx}
+                  onPrev={() => setActiveIdx(i => (i - 1 + product.images.length) % product.images.length)}
+                  onNext={() => setActiveIdx(i => (i + 1) % product.images.length)}
+                />
+              </div>
             </div>
 
             {/* Info Panel */}
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs tracking-widest text-gray-500 uppercase" style={{ fontFamily: "Poppins" }}>
+            <div className="flex flex-col gap-4 sm:gap-6">
+              {/* Header with brand, name, rating */}
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="text-[10px] tracking-widest text-gray-500 uppercase sm:text-xs"
+                    style={{ fontFamily: "Poppins" }}
+                  >
                     {product.brand}
                   </p>
-                  <h1 className="mt-1 text-3xl font-semibold" style={{ fontFamily: "Volkhov" }}>
+                  <h1 className="mt-1 text-xl font-semibold sm:text-2xl md:text-3xl" style={{ fontFamily: "Volkhov" }}>
                     {product.name}
                   </h1>
-                  <div className="mt-2 flex items-center gap-2 text-sm text-gray-600" style={{ fontFamily: "Poppins" }}>
+                  <div
+                    className="mt-2 flex flex-wrap items-center gap-1 text-xs text-gray-600 sm:gap-2 sm:text-sm"
+                    style={{ fontFamily: "Poppins" }}
+                  >
                     <span>⭐ {product.rating.toFixed(1)}</span>
                     <span>·</span>
                     <span>{product.reviews.toLocaleString()} reviews</span>
-                    <span>·</span>
-                    <span className="text-red-600">{Math.floor(Math.random() * 24) + 5} people viewing</span>
+                    <span className="hidden sm:inline">·</span>
+                    <span className="hidden text-red-600 sm:inline">
+                      {Math.floor(Math.random() * 24) + 5} people viewing
+                    </span>
                   </div>
                 </div>
                 <button
                   onClick={toggleWishlist}
                   aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
-                  className={`flex h-12 w-12 items-center justify-center rounded-full border-2 text-2xl transition ${
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-xl transition sm:h-12 sm:w-12 sm:text-2xl ${
                     inWishlist
                       ? "border-red-500 bg-red-50 text-red-600 hover:bg-red-100"
                       : "border-gray-300 bg-white text-gray-400 hover:border-red-300 hover:text-red-500"
@@ -181,32 +204,38 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
                 </button>
               </div>{" "}
               {/* Price + discount */}
-              <div className="flex items-end gap-3">
-                <div className="text-3xl font-semibold" style={{ fontFamily: "Poppins" }}>
+              <div className="flex flex-wrap items-end gap-2 sm:gap-3">
+                <div className="text-2xl font-semibold sm:text-3xl" style={{ fontFamily: "Poppins" }}>
                   ${product.price.toFixed(2)}
                 </div>
                 {product.price && (
                   <>
-                    <div className="text-lg text-gray-400 line-through">${(product.price * 1.33).toFixed(2)}</div>
-                    <div className="rounded-md bg-red-500 px-2 py-1 text-xs font-semibold text-white">Save 33%</div>
+                    <div className="text-base text-gray-400 line-through sm:text-lg">
+                      ${(product.price * 1.33).toFixed(2)}
+                    </div>
+                    <div className="rounded-md bg-red-500 px-2 py-1 text-[10px] font-semibold text-white sm:text-xs">
+                      Save 33%
+                    </div>
                   </>
                 )}
               </div>
               {/* Timer + stock */}
-              <div className="flex flex-wrap items-center gap-4 rounded-lg border border-gray-200 p-4">
-                <div className="text-sm" style={{ fontFamily: "Poppins" }}>
+              <div className="flex flex-col gap-3 rounded-lg border border-gray-200 p-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 sm:p-4">
+                <div className="text-xs sm:text-sm" style={{ fontFamily: "Poppins" }}>
                   Hurry up! Sale ends in
                 </div>
-                <div className="flex items-center gap-2 text-center" aria-live="polite">
+                <div className="flex items-center gap-1 text-center sm:gap-2" aria-live="polite">
                   {(["d", "h", "m", "s"] as const).map(k => (
-                    <div key={k} className="min-w-14 rounded-md bg-red-50 p-2">
-                      <div className="text-xl font-semibold text-red-600">{t[k].toString().padStart(2, "0")}</div>
-                      <div className="text-[10px] tracking-wide text-red-700 uppercase">{k}</div>
+                    <div key={k} className="min-w-10 rounded-md bg-red-50 p-1.5 sm:min-w-14 sm:p-2">
+                      <div className="text-base font-semibold text-red-600 sm:text-xl">
+                        {t[k].toString().padStart(2, "0")}
+                      </div>
+                      <div className="text-[8px] tracking-wide text-red-700 uppercase sm:text-[10px]">{k}</div>
                     </div>
                   ))}
                 </div>
-                <div className="ml-auto text-sm text-gray-600">
-                  {product.inStock ? `Only ${Math.floor(Math.random() * 9) + 1} items left in stock` : "Out of stock"}
+                <div className="text-xs text-gray-600 sm:ml-auto sm:text-sm">
+                  {product.inStock ? `Only ${Math.floor(Math.random() * 9) + 1} items left` : "Out of stock"}
                 </div>
               </div>
               {/* Size */}
@@ -242,8 +271,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
                 </div>
               )}
               {/* Quantity + CTA */}
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center rounded-md border border-gray-300">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <div className="flex items-center justify-center rounded-md border border-gray-300 sm:justify-start">
                   <button className="px-3 py-2 text-lg" onClick={() => setQty(q => Math.max(1, q - 1))}>
                     −
                   </button>
@@ -259,18 +288,18 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
                 <button
                   onClick={handleAddToCart}
                   disabled={!canSubmit}
-                  className="flex-1 rounded-md bg-black px-8 py-3 font-semibold text-white transition hover:bg-gray-800 disabled:opacity-50"
+                  className="w-full rounded-md bg-black px-6 py-3 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:opacity-50 sm:w-auto sm:flex-1 sm:px-8"
                 >
                   Add to Cart
                 </button>
                 <button
                   onClick={toggleWishlist}
-                  className={`flex items-center justify-center gap-2 rounded-md border px-6 py-3 font-semibold transition ${
+                  className={`flex w-full items-center justify-center gap-2 rounded-md border px-4 py-3 text-sm font-semibold transition sm:w-auto sm:px-6 ${
                     inWishlist ? "border-red-500 bg-red-50 text-red-600" : "border-gray-300 bg-white hover:bg-gray-50"
                   }`}
                 >
-                  <span className="text-xl">{inWishlist ? "♥" : "♡"}</span>
-                  <span>{inWishlist ? "In Wishlist" : "Add to Wishlist"}</span>
+                  <span className="text-lg sm:text-xl">{inWishlist ? "♥" : "♡"}</span>
+                  <span>{inWishlist ? "In Wishlist" : "Wishlist"}</span>
                 </button>
               </div>
               {/* Compare / Ask / Share */}
@@ -308,7 +337,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
 };
 
 export default ProductPage;
-
 
 const SwipeImage: React.FC<{
   src: string;
