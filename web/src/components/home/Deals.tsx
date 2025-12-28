@@ -118,7 +118,7 @@ export const Deals: React.FC = () => {
               </div>
             </div>
             <div className="relative">
-              <img src="../../../public/images/home/Deal/image.png" alt="Deal" />
+              <img src="/images/home/Deal/image.png" alt="Deal" />
               <div className="absolute bottom-6 left-6 flex flex-col items-start gap-2 bg-white px-[42px] py-8">
                 <div className="flex items-center gap-2">
                   <p
@@ -143,7 +143,7 @@ export const Deals: React.FC = () => {
                 </p>
               </div>
             </div>
-            <img src="../../../public/images/home/Deal/deal-2.png" alt="" />
+            <img src="/images/home/Deal/deal-2.png" alt="" />
           </div>
         </div>
       </div>

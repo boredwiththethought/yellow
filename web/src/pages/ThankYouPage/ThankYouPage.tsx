@@ -5,7 +5,6 @@ import type { ThankYouProps } from "./types";
 const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) => {
   return (
     <div className="flex min-h-screen flex-col bg-white">
-
       <div className="flex flex-1 items-center justify-center px-4 py-20">
         <div className="w-full max-w-3xl text-center">
           <h1
@@ -14,7 +13,6 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
           >
             Thank You
           </h1>
-
 
           <div className="space-y-3">
             <p className="font-poppins text-center text-lg text-[30.82px] leading-[100%] font-medium tracking-[0] text-gray-400 md:text-xl">
@@ -26,7 +24,6 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
             </p>
           </div>
 
-  
           {orderNumber && (
             <div className="mt-10 inline-block rounded-lg bg-gray-50 p-6">
               <p className="mb-1 text-sm text-gray-600">Order Number</p>
@@ -34,7 +31,6 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
               {customerName && <p className="mt-2 text-gray-500">Thank you, {customerName}!</p>}
             </div>
           )}
-
 
           <div className="mt-12">
             <Link
@@ -47,11 +43,9 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
         </div>
       </div>
 
-
       <div className="bg-gray-800 py-8 md:py-10">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-
             <div className="flex flex-col items-center gap-3 text-center md:flex-row md:text-left">
               <span className="text-base font-medium text-white md:text-lg">
                 Get More Premium & High Quality Designs For
@@ -63,9 +57,8 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
               </div>
             </div>
 
-    
             <div className="flex items-center gap-3">
-              <img src="../../../public/images/thankyou/to-right.png" className="text-2xl md:text-3xl" />
+              <img src="/images/thankyou/to-right.png" className="text-2xl md:text-3xl" />
               <div className="text-center">
                 <a
                   href="https://community.example.com"
@@ -78,7 +71,7 @@ const ThankYouPage: React.FC<ThankYouProps> = ({ orderNumber, customerName }) =>
                   <span className="underline">Our Community</span>
                 </a>
               </div>
-              <img src="../../../public/images/thankyou/to-left.png" className="text-2xl md:text-3xl" />
+              <img src="/images/thankyou/to-left.png" className="text-2xl md:text-3xl" />
             </div>
           </div>
         </div>

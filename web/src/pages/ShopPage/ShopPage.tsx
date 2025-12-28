@@ -121,7 +121,7 @@ const ShopPage = () => {
             <span style={{ fontFamily: "Jost" }} className="text-center text-xs font-normal sm:text-[15px]">
               Home
             </span>
-            <img src="../../../public/images/shop/SVG.svg" alt="" className="h-3 w-3 sm:h-auto sm:w-auto" />
+            <img src="/images/shop/SVG.svg" alt="" className="h-3 w-3 sm:h-auto sm:w-auto" />
             <span style={{ fontFamily: "Jost" }} className="text-center text-xs font-normal sm:text-[15px]">
               Fashion
             </span>

@@ -4,10 +4,10 @@ import { FooterNavbar } from "./FooterNavbar";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="container mx-auto bg-white px-4 py-6 mt-[150px]">
+    <footer className="container mx-auto mt-[150px] bg-white px-4 py-6">
       <div className="flex flex-col gap-12">
         <div className="flex items-center justify-around">
-          <img src="../../../../public/images/footer/footer-man.png" alt="show-man-footer" />
+          <img src="/images/footer/footer-man.png" alt="show-man-footer" />
           <div className="flex flex-col items-center justify-center gap-[30px]">
             <div className="flex flex-1 flex-col gap-[30px] p-10 drop-shadow-md">
               <div className="flex flex-col items-center justify-center gap-5 text-center">
@@ -38,9 +38,9 @@ const Footer: React.FC = () => {
               <FooterButton text="Subscribe Now" onClick={() => alert("Subscribed!")} />
             </div>
           </div>
-          <img src="../../../../public/images/footer/foter-girl.png" alt="show-woman-footer" />
+          <img src="/images/footer/foter-girl.png" alt="show-woman-footer" />
         </div>
-        < FooterNavbar />
+        <FooterNavbar />
       </div>
     </footer>
   );

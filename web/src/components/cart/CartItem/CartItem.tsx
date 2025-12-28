@@ -73,7 +73,7 @@ const CartItem: React.FC<CartItemProps> = ({ id, name, price, color, quantity, o
         </div>
         <div className="borde-[1px] border-[rgba(0, 0, 0, 0.39)] flex items-start border-t border-b pt-[35px] pb-11">
           <div className="flex items-start gap-[22px]">
-            <img src="../../../../public/images/cart/Product Image.png" alt="product-item" />
+            <img src="/images/cart/Product Image.png" alt="product-item" />
             <div className="flex flex-col items-start gap-3.5">
               <span
                 className="w-[200px] align-middle text-[22px] leading-[100%] font-normal tracking-[0px] capitalize"

@@ -2,7 +2,7 @@ import React from "react";
 
 export const SocialContacts: React.FC = () => {
   return (
-    <div className="container mx-auto mt-[150px] flex w-full flex-col gap-[100px] px-4 items-center">
+    <div className="container mx-auto mt-[150px] flex w-full flex-col items-center gap-[100px] px-4">
       <div className="flex flex-col items-center gap-5 text-center">
         <h1
           className="text-center text-[46px] leading-[100%] font-normal tracking-[0] text-[#484848]"
@@ -19,11 +19,11 @@ export const SocialContacts: React.FC = () => {
         </p>
       </div>
       <div className="flex items-center">
-        <img src="../../../public/images/home/social-contact/s-1.png" alt="s-1" />
-        <img src="../../../public/images/home/social-contact/s-2.png" alt="s-1" />
-        <img src="../../../public/images/home/social-contact/s-3.png" alt="s-1" />
-        <img src="../../../public/images/home/social-contact/s-4.png" alt="s-1" />
-        <img src="../../../public/images/home/social-contact/s-5.png" alt="s-1" />
+        <img src="/images/home/social-contact/s-1.png" alt="s-1" />
+        <img src="/images/home/social-contact/s-2.png" alt="s-2" />
+        <img src="/images/home/social-contact/s-3.png" alt="s-3" />
+        <img src="/images/home/social-contact/s-4.png" alt="s-4" />
+        <img src="/images/home/social-contact/s-5.png" alt="s-5" />
       </div>
     </div>
   );
