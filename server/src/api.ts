@@ -40,7 +40,7 @@ let db: Db | null = null;
 
 async function connectToDatabase() {
   if (db && client) return { client, db };
-  
+
   // Serverless-optimized MongoDB connection
   const mongo = new MongoClient(uri, {
     maxPoolSize: 10,
@@ -52,7 +52,8 @@ async function connectToDatabase() {
   db = mongo.db(dbName);
   console.log("MongoDB connected successfully");
   return { client, db };
-}function getDb(): Db {
+}
+function getDb(): Db {
   if (!db) throw new Error("Database not initialized");
   return db;
 }
