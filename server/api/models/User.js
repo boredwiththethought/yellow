@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sanitizeUser = sanitizeUser;
-function sanitizeUser(user) {
+export function sanitizeUser(user) {
     return {
         _id: user._id?.toString() || "",
         email: user.email,

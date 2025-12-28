@@ -1,11 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const Product_1 = __importDefault(require("../models/Product"));
-const router = express_1.default.Router();
+import express from "express";
+import Product from "../models/Product";
+const router = express.Router();
 router.get("/", async (req, res) => {
     try {
         const { collection, category, sizes, colors, brands, minPrice, maxPrice, tags, sort, search, } = req.query;
@@ -58,7 +53,7 @@ router.get("/", async (req, res) => {
         else {
             sortOption.createdAt = -1;
         }
-        const products = await Product_1.default.find(query).sort(sortOption);
+        const products = await Product.find(query).sort(sortOption);
         res.json({
             success: true,
             count: products.length,
@@ -75,7 +70,7 @@ router.get("/", async (req, res) => {
 });
 router.get("/:id", async (req, res) => {
     try {
-        const product = await Product_1.default.findById(req.params.id);
+        const product = await Product.findById(req.params.id);
         if (!product) {
             return res.status(404).json({
                 success: false,
@@ -97,10 +92,10 @@ router.get("/:id", async (req, res) => {
 });
 router.get("/filters/options", async (_req, res) => {
     try {
-        const brands = await Product_1.default.distinct("brand");
-        const colors = await Product_1.default.distinct("colors");
-        const tags = await Product_1.default.distinct("tags");
-        const priceRange = await Product_1.default.aggregate([
+        const brands = await Product.distinct("brand");
+        const colors = await Product.distinct("colors");
+        const tags = await Product.distinct("tags");
+        const priceRange = await Product.aggregate([
             {
                 $group: {
                     _id: null,
@@ -128,4 +123,4 @@ router.get("/filters/options", async (_req, res) => {
         });
     }
 });
-exports.default = router;
+export default router;

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.fakeProducts = void 0;
-exports.fakeProducts = [
+export const fakeProducts = [
     // Men's Fashion - New Arrivals
     {
         name: "Casual Linen Shirt",

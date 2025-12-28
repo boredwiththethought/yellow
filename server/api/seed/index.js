@@ -1,27 +1,22 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const Product_1 = __importDefault(require("../models/Product"));
-const products_1 = require("./products");
-dotenv_1.default.config();
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import Product from "../models/Product";
+import { fakeProducts } from "./products";
+dotenv.config();
 const seedDatabase = async () => {
     try {
         const mongoURI = process.env.MONGO_URI ||
             "mongodb+srv://iamartykov_db_user:AgwpeQiDPiAomc5E@fasco.mpr3qez.mongodb.net/";
         console.log("🔌 Connecting to MongoDB...");
-        await mongoose_1.default.connect(mongoURI);
+        await mongoose.connect(mongoURI);
         console.log("✅ Connected to MongoDB");
         console.log("🗑️  Clearing existing products...");
-        await Product_1.default.deleteMany({});
+        await Product.deleteMany({});
         console.log("✅ Products cleared");
         console.log("📦 Adding fake products...");
-        await Product_1.default.insertMany(products_1.fakeProducts);
-        console.log(`✅ Added ${products_1.fakeProducts.length} products`);
-        const stats = await Product_1.default.aggregate([
+        await Product.insertMany(fakeProducts);
+        console.log(`✅ Added ${fakeProducts.length} products`);
+        const stats = await Product.aggregate([
             {
                 $group: {
                     _id: "$category",

@@ -1,39 +1,34 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const zod_1 = require("zod");
-const db_js_1 = require("../db.js");
-const User_js_1 = require("../models/User.js");
-const mongodb_1 = require("mongodb");
-const router = (0, express_1.Router)();
+import { Router } from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { z } from "zod";
+import { getDb } from "../db.js";
+import { sanitizeUser } from "../models/User.js";
+import { ObjectId } from "mongodb";
+const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-production";
 const JWT_EXPIRES_IN = "7d";
-const registerSchema = zod_1.z.object({
-    email: zod_1.z.string().email("Invalid email format"),
-    password: zod_1.z.string().min(8, "Password must be at least 8 characters"),
-    firstName: zod_1.z.string().min(2, "First name must be at least 2 characters"),
-    lastName: zod_1.z.string().min(2, "Last name must be at least 2 characters"),
+const registerSchema = z.object({
+    email: z.string().email("Invalid email format"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    firstName: z.string().min(2, "First name must be at least 2 characters"),
+    lastName: z.string().min(2, "Last name must be at least 2 characters"),
 });
-const loginSchema = zod_1.z.object({
-    email: zod_1.z.string().email("Invalid email format"),
-    password: zod_1.z.string().min(1, "Password is required"),
+const loginSchema = z.object({
+    email: z.string().email("Invalid email format"),
+    password: z.string().min(1, "Password is required"),
 });
-const forgotPasswordSchema = zod_1.z.object({
-    email: zod_1.z.string().email("Invalid email format"),
+const forgotPasswordSchema = z.object({
+    email: z.string().email("Invalid email format"),
 });
-const verifyCodeSchema = zod_1.z.object({
-    email: zod_1.z.string().email("Invalid email format"),
-    code: zod_1.z.string().length(6, "Code must be 6 digits"),
+const verifyCodeSchema = z.object({
+    email: z.string().email("Invalid email format"),
+    code: z.string().length(6, "Code must be 6 digits"),
 });
-const resetPasswordSchema = zod_1.z.object({
-    email: zod_1.z.string().email("Invalid email format"),
-    code: zod_1.z.string().length(6, "Code must be 6 digits"),
-    newPassword: zod_1.z.string().min(8, "Password must be at least 8 characters"),
+const resetPasswordSchema = z.object({
+    email: z.string().email("Invalid email format"),
+    code: z.string().length(6, "Code must be 6 digits"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
 });
 function generateVerificationCode() {
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -52,7 +47,7 @@ router.post("/register", async (req, res) => {
             });
         }
         const { email, password, firstName, lastName } = validation.data;
-        const db = (0, db_js_1.getDb)();
+        const db = getDb();
         const existingUser = await db
             .collection("users")
             .findOne({ email: email.toLowerCase() });
@@ -62,7 +57,7 @@ router.post("/register", async (req, res) => {
                 message: "User with this email already exists",
             });
         }
-        const hashedPassword = await bcrypt_1.default.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = {
             email: email.toLowerCase(),
             password: hashedPassword,
@@ -74,7 +69,7 @@ router.post("/register", async (req, res) => {
         };
         const result = await db.collection("users").insertOne(newUser);
         const user = { ...newUser, _id: result.insertedId };
-        const token = jsonwebtoken_1.default.sign({ userId: result.insertedId.toString(), email: user.email }, JWT_SECRET, {
+        const token = jwt.sign({ userId: result.insertedId.toString(), email: user.email }, JWT_SECRET, {
             expiresIn: JWT_EXPIRES_IN,
         });
         console.log("\n=== NEW USER REGISTERED ===");
@@ -85,7 +80,7 @@ router.post("/register", async (req, res) => {
             success: true,
             message: "Registration successful",
             token,
-            user: (0, User_js_1.sanitizeUser)(user),
+            user: sanitizeUser(user),
         });
     }
     catch (error) {
@@ -110,7 +105,7 @@ router.post("/login", async (req, res) => {
             });
         }
         const { email, password } = validation.data;
-        const db = (0, db_js_1.getDb)();
+        const db = getDb();
         const user = await db
             .collection("users")
             .findOne({ email: email.toLowerCase() });
@@ -120,14 +115,14 @@ router.post("/login", async (req, res) => {
                 message: "Invalid email or password",
             });
         }
-        const isValidPassword = await bcrypt_1.default.compare(password, user.password);
+        const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword) {
             return res.status(401).json({
                 success: false,
                 message: "Invalid email or password",
             });
         }
-        const token = jsonwebtoken_1.default.sign({ userId: user._id.toString(), email: user.email }, JWT_SECRET, {
+        const token = jwt.sign({ userId: user._id.toString(), email: user.email }, JWT_SECRET, {
             expiresIn: JWT_EXPIRES_IN,
         });
         console.log("\n=== USER LOGGED IN ===");
@@ -137,7 +132,7 @@ router.post("/login", async (req, res) => {
             success: true,
             message: "Login successful",
             token,
-            user: (0, User_js_1.sanitizeUser)(user),
+            user: sanitizeUser(user),
         });
     }
     catch (error) {
@@ -162,7 +157,7 @@ router.post("/forgot-password", async (req, res) => {
             });
         }
         const { email } = validation.data;
-        const db = (0, db_js_1.getDb)();
+        const db = getDb();
         const user = await db
             .collection("users")
             .findOne({ email: email.toLowerCase() });
@@ -215,7 +210,7 @@ router.post("/verify-code", async (req, res) => {
             });
         }
         const { email, code } = validation.data;
-        const db = (0, db_js_1.getDb)();
+        const db = getDb();
         const user = await db
             .collection("users")
             .findOne({ email: email.toLowerCase() });
@@ -267,7 +262,7 @@ router.post("/reset-password", async (req, res) => {
             });
         }
         const { email, code, newPassword } = validation.data;
-        const db = (0, db_js_1.getDb)();
+        const db = getDb();
         const user = await db
             .collection("users")
             .findOne({ email: email.toLowerCase() });
@@ -289,7 +284,7 @@ router.post("/reset-password", async (req, res) => {
                 message: "Verification code has expired",
             });
         }
-        const hashedPassword = await bcrypt_1.default.hash(newPassword, 10);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
         await db.collection("users").updateOne({ _id: user._id }, {
             $set: {
                 password: hashedPassword,
@@ -325,11 +320,11 @@ router.get("/me", async (req, res) => {
                 message: "No token provided",
             });
         }
-        const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
-        const db = (0, db_js_1.getDb)();
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const db = getDb();
         const user = await db
             .collection("users")
-            .findOne({ _id: new mongodb_1.ObjectId(decoded.userId) });
+            .findOne({ _id: new ObjectId(decoded.userId) });
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -338,7 +333,7 @@ router.get("/me", async (req, res) => {
         }
         res.json({
             success: true,
-            user: (0, User_js_1.sanitizeUser)(user),
+            user: sanitizeUser(user),
         });
     }
     catch (error) {
@@ -349,4 +344,4 @@ router.get("/me", async (req, res) => {
         });
     }
 });
-exports.default = router;
+export default router;

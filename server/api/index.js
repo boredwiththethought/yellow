@@ -1,23 +1,18 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
-const morgan_1 = __importDefault(require("morgan"));
-const db_js_1 = require("./db.js");
-const mongodb_1 = require("mongodb");
-const auth_js_1 = __importDefault(require("./routes/auth.js"));
-const app = (0, express_1.default)();
-app.use((0, cors_1.default)({ origin: ["http://localhost:5173"], credentials: true }));
-app.use(express_1.default.json());
-app.use((0, morgan_1.default)("dev"));
-app.use("/api/auth", auth_js_1.default);
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import { connectToDatabase, getDb } from "./db.js";
+import { ObjectId } from "mongodb";
+import authRoutes from "./routes/auth.js";
+const app = express();
+app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+app.use(express.json());
+app.use(morgan("dev"));
+app.use("/api/auth", authRoutes);
 app.get("/api/health", async (_req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
+        await connectToDatabase();
         res.json({ status: "ok" });
     }
     catch (e) {
@@ -26,8 +21,8 @@ app.get("/api/health", async (_req, res) => {
 });
 app.get("/api/items", async (req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         const query = {};
         const { category, brand, color, priceMin, priceMax } = req.query;
         if (category)
@@ -56,8 +51,8 @@ app.get("/api/items", async (req, res) => {
 });
 app.post("/api/items", async (req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         const doc = req.body ?? {};
         if (typeof doc !== "object" || Array.isArray(doc)) {
             return res.status(400).json({ error: "Body must be an object" });
@@ -71,14 +66,14 @@ app.post("/api/items", async (req, res) => {
 });
 app.delete("/api/items/:id", async (req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         const id = req.params.id;
-        if (!mongodb_1.ObjectId.isValid(id))
+        if (!ObjectId.isValid(id))
             return res.status(400).json({ error: "Invalid id" });
         const result = await db
             .collection("fascocollection")
-            .deleteOne({ _id: new mongodb_1.ObjectId(id) });
+            .deleteOne({ _id: new ObjectId(id) });
         res.json({ deletedCount: result.deletedCount });
     }
     catch (e) {
@@ -87,8 +82,8 @@ app.delete("/api/items/:id", async (req, res) => {
 });
 app.get("/api/filters", async (_req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         const categories = await db
             .collection("fascocollection")
             .distinct("category");
@@ -102,8 +97,8 @@ app.get("/api/filters", async (_req, res) => {
 });
 app.get("/api/products", async (req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         const query = {};
         const { collection, category, sizes, colors, brands, minPrice, maxPrice, tags, sort, search, } = req.query;
         if (collection && collection !== "all-products") {
@@ -192,17 +187,17 @@ app.get("/api/products", async (req, res) => {
 });
 app.get("/api/products/:id", async (req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         const { id } = req.params;
-        if (!mongodb_1.ObjectId.isValid(id)) {
+        if (!ObjectId.isValid(id)) {
             return res
                 .status(400)
                 .json({ success: false, message: "Invalid product id" });
         }
         const product = await db
             .collection("products")
-            .findOne({ _id: new mongodb_1.ObjectId(id) });
+            .findOne({ _id: new ObjectId(id) });
         if (!product) {
             return res
                 .status(404)
@@ -220,8 +215,8 @@ app.get("/api/products/:id", async (req, res) => {
 });
 app.post("/api/orders", async (req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         const orderData = req.body;
         console.log("\n=== NEW ORDER RECEIVED ===");
         console.log("Customer:", orderData.customer);
@@ -253,8 +248,8 @@ app.post("/api/orders", async (req, res) => {
 });
 app.get("/api/products/filters/options", async (_req, res) => {
     try {
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         const brands = await db.collection("products").distinct("brand");
         const colors = await db.collection("products").distinct("colors");
         const tags = await db.collection("products").distinct("tags");
@@ -290,7 +285,7 @@ app.get("/api/products/filters/options", async (_req, res) => {
     }
 });
 const PORT = Number(process.env.PORT || 5000);
-(0, db_js_1.connectToDatabase)()
+connectToDatabase()
     .then(() => {
     app.listen(PORT, () => {
         console.log(`API listening on http://localhost:${PORT}`);

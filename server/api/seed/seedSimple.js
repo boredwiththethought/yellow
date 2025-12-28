@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
-const db_js_1 = require("../db.js");
+import "dotenv/config";
+import { connectToDatabase, getDb } from "../db.js";
 const fakeProducts = [
     // ==================== SNEAKERS & SHOES ====================
     {
@@ -1165,8 +1163,8 @@ const fakeProducts = [
 const seedDatabase = async () => {
     try {
         console.log("🔌 Connecting to MongoDB...");
-        await (0, db_js_1.connectToDatabase)();
-        const db = (0, db_js_1.getDb)();
+        await connectToDatabase();
+        const db = getDb();
         console.log("✅ Connected to MongoDB");
         // Очистить коллекцию products
         console.log("🗑️  Clearing existing products...");
