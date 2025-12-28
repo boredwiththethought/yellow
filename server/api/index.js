@@ -394,5 +394,6 @@ app.post("/api/auth/forgot-password", async (req, res) => {
         });
     }
 });
-// Export for Vercel Serverless
-export default app;
+export default function handler(req, res) {
+    return app(req, res);
+}
