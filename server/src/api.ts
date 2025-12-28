@@ -40,7 +40,10 @@ let db: Db | null = null;
 
 async function connectToDatabase() {
   if (db && client) return { client, db };
-  const mongo = new MongoClient(uri);
+  const mongo = new MongoClient(uri, {
+    tls: true,
+    tlsAllowInvalidCertificates: false,
+  });
   await mongo.connect();
   client = mongo;
   db = mongo.db(dbName);
